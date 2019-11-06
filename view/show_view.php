@@ -172,7 +172,11 @@ function show_contacto_chat() {
 		  <section class="contestar_mensaje">
 			<form id="vb" action="index.php" method="post" role="form">
 
-				<textarea id="ta" placeholder="Mensaje" rows="5" cols="40" required="" ></textarea><br><br>
+				<textarea id="ta" placeholder="Mensaje" rows="5" cols="40" required="" style="resize: none;" >
+				</textarea>
+				
+				<br>
+				<br>
 
 				<span>
 				  Elegir archivo<input type="file" name="b1" multiple>
@@ -218,7 +222,7 @@ function show_perfil() {
 			Cambiar imagen de perfil<input type="file" name="b1" multiple>
 	  </span><br><br>
 
-	  <textarea id="ta" rows="5" cols="40" required=""  maxlength="20" >I am working</textarea><br><br>
+	  <textarea id="ta" rows="5" cols="40" required="" maxlength="20" style="resize: none;">I am working</textarea><br><br>
 	   
 	  <button type="submit" name="editar" >Editar</button>
 
