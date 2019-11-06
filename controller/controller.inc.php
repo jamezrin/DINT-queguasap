@@ -12,36 +12,48 @@ function show_content() {
 			show_loging();
 		}
 		else {
-			switch ($_GET['cmd']) {
-				case 'start':
-					show_loging();
-					break;
+		    if ($_GET["cmd"] === "start"
+                || $_GET["cmd"] === "logout") {
+                switch ($_GET['cmd']) {
+                    case 'start':
+                        show_loging();
+                        break;
 
-				case 'chat':
-					show_chats();
-					break;
+                    case 'logout':
+                        show_loging();
+                        show_msg("Ha cerrado la sesión");
+                        break;
 
-				case 'ver_chat':
-					show_contacto_chat();
-					break;
+                    default:
+                        "error de conexión";
+                        break;
+                }
+            } elseif (isset ($_SESSION["user"])) {
+                switch ($_GET['cmd']) {
+                    case 'chat':
+                        show_chats();
+                        break;
 
-				case 'perfil':
-					show_perfil();
-					break;
+                    case 'ver_chat':
+                        show_contacto_chat();
+                        break;
 
-				case 'ajustes':
-					show_ajustes();
-					break;
+                    case 'perfil':
+                        show_perfil();
+                        break;
 
-				case 'logout':
-					show_loging();
-					show_msg("Ha cerrado la sesión");
-					break;	
+                    case 'ajustes':
+                        show_ajustes();
+                        break;
 
-				default:
-					"error de conexión";
-					break;
-			}
+                    default:
+                        "error de conexión";
+                        break;
+                }
+            } else {
+				show_loging();
+            }
+
 
 		}
 	}

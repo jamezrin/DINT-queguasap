@@ -16,8 +16,9 @@ function connection() {
 *	S: booleano: conexión correcta
 *	SQL: select * from usuarios WHERE ...
 */
-function login_ok()	{
-	
+
+
+function login_ok($numero, $pass)	{
 	return true;
 }
 

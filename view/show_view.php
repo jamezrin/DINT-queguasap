@@ -76,8 +76,7 @@ function show_loging() {
 * SQL: select idChat, telefono from TIENE where numero =  $_SESSION['user'];
 */
 function show_chats() {
-
-echo '
+	echo '
 
 	<section id="chats">
 	  <h3><a href="index.php?cmd=ver_chat" class="btn">Fulanito
@@ -111,6 +110,7 @@ echo '
 
 
 ';
+
 }
 
 /*
