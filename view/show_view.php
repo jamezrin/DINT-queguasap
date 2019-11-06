@@ -214,13 +214,11 @@ function show_perfil() {
 
 	<form id="vb" action="index.php" method="post" role="form">
 
-	  <input id="nombre" type="text" name="nombre" placeholder="escoge un nombre de usuario" required="" ><br><br>
-		
 			  <span>
 			Cambiar imagen de perfil<input type="file" name="b1" multiple>
 	  </span><br><br>
 
-	  <textarea id="ta" rows="5" cols="40" required="" >I am working</textarea><br><br>
+	  <textarea id="ta" rows="5" cols="40" required=""  maxlength="20" >I am working</textarea><br><br>
 	   
 	  <button type="submit" name="editar" >Editar</button>
 
