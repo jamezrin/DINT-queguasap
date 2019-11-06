@@ -1,4 +1,5 @@
 BACK_COLOR=verde
 LONG_TEXTO=20
 TAM_IMAGEN=20
-EMAIL_ADMIN=felixcl91@hotmail.com
+NOMBRE_HEADER=Chating
+EMAIL_ADMIN=dasdsa@hotmail.com

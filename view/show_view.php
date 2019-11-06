@@ -212,6 +212,8 @@ function show_contacto_chat() {
 *	SQL:
 */
 function show_perfil() {
+	global $config;
+	$long_texto = $config["LONG_TEXTO"];
 	echo '
 
 		<section id="perfil">
@@ -222,7 +224,7 @@ function show_perfil() {
 			Cambiar imagen de perfil<input type="file" name="b1" multiple>
 	  </span><br><br>
 
-	  <textarea id="ta" rows="5" cols="40" required="" maxlength="20" style="resize: none;">I am working</textarea><br><br>
+	  <textarea id="ta" rows="5" cols="40" required="" maxlength="' . $long_texto . '" style="resize: none;">I am working</textarea><br><br>
 	   
 	  <button type="submit" name="editar" >Editar</button>
 

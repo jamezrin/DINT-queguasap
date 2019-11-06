@@ -7,10 +7,12 @@
 *	SQL:
 */
 function show_footer(){
+	global $config;
+	$email = $config["EMAIL_ADMIN"];
 	echo '<footer>
 			<p>
 				(c) Todos los derechos reservados - FCL 2019 <br>
-				Diseñado por <a href="felix:felixcl91@hotmail.com">mi</a>
+				Diseñado por <a href="mailto:' . $email . '">mi</a>
 			</p>
 		</footer>
 		</div>

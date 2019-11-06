@@ -3,6 +3,8 @@
 
 session_start();
 
+$config = parse_ini_file("configuration.txt");
+
 include_once 'model/bd.inc.php';
 
 include_once 'view/header.inc.php';

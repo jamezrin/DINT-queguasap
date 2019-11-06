@@ -7,10 +7,12 @@
 *	SQL:
 */
 function show_header(){
+	global $config;
+	$nombreApp = $config["NOMBRE_HEADER"];
 	echo '<!DOCTYPE html>
 			<html>
 			<head>
-				<title>CHATING</title>
+				<title>'. $nombreApp . '</title>
 
 				<link rel="icon" href="view/images/bd.jpg">
 				<link rel="stylesheet" type="text/css" href="view/css/estilo.css">
