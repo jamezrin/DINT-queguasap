@@ -6,11 +6,12 @@
 *	S:
 *	SQL: select logo, texto from usuario
 */
-function show_menu() {
+function show_menu()
+{
 
-	if (isset($_SESSION['user'])) {
+    if (isset($_SESSION['user'])) {
 
-		echo '<header>
+        echo '<header>
 
 			<section id="estado">
 			  <img src="view/images/f.jpg" class="imgRedonda"/><br>
@@ -27,18 +28,16 @@ function show_menu() {
 			  </ul>
 			</nav>
 		   </header>';
-}
+    } else {
 
-	else {
-  
-	
-		echo '<header>
+
+        echo '<header>
 			<br>
 			<h1>CHATING</h1>
 			
 			</header>';
-  
-	}
+
+    }
 
 }
 
@@ -49,9 +48,10 @@ function show_menu() {
 *	S:
 *	SQL:
 */
-function show_loging() {
+function show_loging()
+{
 
-	echo '
+    echo '
 
 
 		<section id="slider">
@@ -75,8 +75,9 @@ function show_loging() {
 * S:
 * SQL: select idChat, telefono from TIENE where numero =  $_SESSION['user'];
 */
-function show_chats() {
-	echo '
+function show_chats()
+{
+    echo '
 
 	<section id="chats">
 	  <h3><a href="index.php?cmd=ver_chat" class="btn">Fulanito
@@ -121,7 +122,7 @@ function show_chats() {
 */
 function show_msg($msg)
 {
-	echo "<script type='text/javascript'>alert('".$msg."');</script>";
+    echo "<script type='text/javascript'>alert('" . $msg . "');</script>";
 }
 
 
@@ -132,8 +133,9 @@ function show_msg($msg)
 * SQL: select idMensaje, texto, fecha, hora, fichero, idChat, telefono from mensajes 
 */
 
-function show_contacto_chat() {
-	echo '
+function show_contacto_chat()
+{
+    echo '
 
 			   <section id="datosP">
 				  <section class="datosU">
@@ -211,10 +213,11 @@ function show_contacto_chat() {
 *	S:
 *	SQL:
 */
-function show_perfil() {
-	global $config;
-	$long_texto = $config["LONG_TEXTO"];
-	echo '
+function show_perfil()
+{
+    global $config;
+    $long_texto = $config["LONG_TEXTO"];
+    echo '
 
 		<section id="perfil">
 
@@ -241,9 +244,10 @@ function show_perfil() {
 * S
 * SQL:
 */
-function show_ajustes() {
+function show_ajustes()
+{
 
-echo '
+    echo '
 
   <section id="ajustes">
 
@@ -267,5 +271,5 @@ echo '
 ';
 }
 
-	
+
 ?>

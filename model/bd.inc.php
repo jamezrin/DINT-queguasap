@@ -1,4 +1,4 @@
-<?php	
+<?php
 
 /*
 *	Conexión a la base de datos
@@ -6,8 +6,9 @@
 *	S: conn (variable de tipo connection)
 *	SQL:
 */
-function connection() {
-	return true;
+function connection()
+{
+    return true;
 }
 
 /*
@@ -18,8 +19,9 @@ function connection() {
 */
 
 
-function login_ok($numero, $pass)	{
-	return true;
+function login_ok($numero, $pass)
+{
+    return true;
 }
 
 
@@ -29,8 +31,9 @@ function login_ok($numero, $pass)	{
 *	S:
 *	SQL:
 */
-function unset_session() {
-	unset($_SESSION['user']);
+function unset_session()
+{
+    unset($_SESSION['user']);
 }
 
 /*
@@ -39,8 +42,9 @@ function unset_session() {
 *	S:boolean: operación correcta
 *	SQL: INSERT into Mensaje (texto) values (?);	SELECT idMensaje, texto, fecha, hora, fichero, telefono from Mensajes
 */
-function guardar_mensaje() {
-	return true;
+function guardar_mensaje()
+{
+    return true;
 }
 
 /*
@@ -49,8 +53,9 @@ function guardar_mensaje() {
 *	S:
 *	SQL: UPDATE into usuario ...
 */
-function editar_perfil() {
-	return true;
+function editar_perfil()
+{
+    return true;
 }
 
 /*
@@ -60,8 +65,9 @@ function editar_perfil() {
 *	S: booleano: número correcto
 *	SQL: 
 */
-function maximo_caracteres_estado() {
-	return true;
+function maximo_caracteres_estado()
+{
+    return true;
 }
 
 /*
@@ -70,8 +76,9 @@ function maximo_caracteres_estado() {
 *	S: c
 *	SQL:
 */
-function color_seleccionado() {
-	return true;
+function color_seleccionado()
+{
+    return true;
 }
 
 /*
@@ -81,8 +88,9 @@ function color_seleccionado() {
 *	S: booleano: tamaño correcto
 *	SQL: 
 */
-function tamaño_img() {
-	return true;
+function tamaño_img()
+{
+    return true;
 }
 
 
@@ -92,11 +100,10 @@ function tamaño_img() {
 *	S: booleano: guardado correctamente
 *	SQL:
 */
-function backup_chat() {
-	return true;
+function backup_chat()
+{
+    return true;
 }
-
-
 
 
 ?>
