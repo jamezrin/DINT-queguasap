@@ -19,7 +19,7 @@ function connection()
 */
 
 
-function login_ok($numero, $pass)
+function login_ok()
 {
     return true;
 }
