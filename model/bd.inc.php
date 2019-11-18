@@ -105,5 +105,9 @@ function backup_chat()
     return true;
 }
 
+function registro()
+{
+    return true;
+}
 
 ?>

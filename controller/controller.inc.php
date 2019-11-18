@@ -13,7 +13,8 @@ function show_content()
             show_loging();
         } else {
             if ($_GET["cmd"] === "start"
-                || $_GET["cmd"] === "logout") {
+                || $_GET["cmd"] === "logout"
+                || $_GET["cmd"] === "registrarse") {
                 switch ($_GET['cmd']) {
                     case 'start':
                         show_loging();
@@ -22,6 +23,10 @@ function show_content()
                     case 'logout':
                         show_loging();
                         show_msg("Ha cerrado la sesión");
+                        break;
+
+                    case 'registrarse':
+                        show_register();
                         break;
 
                     default:
@@ -72,6 +77,18 @@ function show_content()
                 show_chats();
             } else {
                 show_msg("Error no enviado");
+            }
+
+        }
+
+        if (isset($_POST['registrarUsuario'])) {
+
+            if (registro()) {
+
+                show_msg("Usuario registrado");
+                show_loging();
+            } else {
+                show_register();
             }
 
         }

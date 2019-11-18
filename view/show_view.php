@@ -64,9 +64,12 @@ function show_loging()
    
 					<input id="pass" type="password" name="pass_user" placeholder="password" required="" ><br><br>
 	   
-					<button type="submit" name="login">Login</button><br><br>
-
+					<button type="submit" name="login">Login</button><br><br>  
+					    
 			</form>
+			
+			       <a href="index.php?cmd=registrarse"> <button name="registrarse">Registrarse</button></a><br><br> 
+			        
 		</section>';
 }
 
@@ -340,5 +343,29 @@ function show_ajustes()
 ';
 }
 
+function show_register() {
+
+    echo ' 
+        <section id="slider">
+        <h2>Registrate</h2>
+            <form action="index.php?" method="post">
+                  <div>
+                      <label>Nombre de usuario</label>
+                      <input type="text" placeholder="Nombre de usuario">
+                  </div>
+                  <div>
+                      <label>Contraseña</label>
+                      <input type="password" placeholder="Contraseña">
+                  </div>
+                  <div>
+                      <label>Foto de perfil</label>
+                      <input type="file" name="imagen" >
+                  </div>
+                  <button type="submit" name="registrarUsuario">Registrarse</button>
+                  
+            </form>
+        </section>
+    ';
+}
 
 ?>
