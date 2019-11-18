@@ -34,6 +34,10 @@ function show_content()
                         show_chats();
                         break;
 
+                    case 'nuevo_chat':
+                        show_nuevo_chat();
+                        break;
+
                     case 'ver_chat':
                         show_contacto_chat();
                         break;
@@ -44,6 +48,10 @@ function show_content()
 
                     case 'ajustes':
                         show_ajustes();
+                        break;
+
+                    case 'borrar_chat':
+                        show_borrar_chat();
                         break;
 
                     default:

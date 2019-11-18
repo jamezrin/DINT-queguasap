@@ -21,7 +21,8 @@ function show_menu()
 			<nav class="menu">
 
 			  <ul>
-				<li><a href="index.php?cmd=chat" class="btn">CHAT</a></li>
+				<li><a href="index.php?cmd=chat" class="btn">Chats activos</a></li>
+				<li><a href="index.php?cmd=nuevo_chat" class="btn">Nuevo chat</a></li>
 				<li><a href="index.php?cmd=perfil" class="btn">Perfil</a></li>
 				<li><a href="index.php?cmd=ajustes" class="btn"><img src="view/images/ajustes.png" width=30 height=30 /></a></li>
 				<li><a href="index.php?cmd=logout" class="btn">Logout</a></li>
@@ -78,40 +79,97 @@ function show_loging()
 function show_chats()
 {
     echo '
-
 	<section id="chats">
 	  <h3><a href="index.php?cmd=ver_chat" class="btn">Fulanito
-	  <img src="view/images/verde.png" width=10 height=10 /></a></h3><br>
+	  <img src="view/images/verde.png" width=10 height=10 /></a>
+	  <a href="index.php?cmd=borrar_chat&id=1"><img src="view/images/equis.png" width=10 height=10 /></a>
+	  </h3><br>
 	  <div></div><br><br>
 
 	  <h3><a href="index.php?cmd=ver_chat" class="btn">Menganito
-	  <img src="view/images/rojo.png" width=10 height=10 /></a></h3><br>
+	  <img src="view/images/rojo.png" width=10 height=10 /></a>
+	  <a href="index.php?cmd=borrar_chat&id=2"><img src="view/images/equis.png" width=10 height=10 /></a>
+	  </h3><br>
 	  <div></div><br><br>
 
 	  <h3><a href="index.php?cmd=ver_chat" class="btn">Mariano
-	  <img src="view/images/rojo.png" width=10 height=10 /></a></h3><br>
+	  <img src="view/images/rojo.png" width=10 height=10 /></a>
+	  <a href="index.php?cmd=borrar_chat&id=3"><img src="view/images/equis.png" width=10 height=10 /></a>
+	  </h3><br>
 	  <div></div><br><br>
 
 	  <h3><a href="index.php?cmd=ver_chat" class="btn">Sefora
-	  <img src="view/images/verde.png" width=10 height=10 /></a></h3><br>
+	  <img src="view/images/verde.png" width=10 height=10 /></a>
+	  <a href="index.php?cmd=borrar_chat&id=4"><img src="view/images/equis.png" width=10 height=10 /></a>
+	  </h3><br>
 	  <div></div><br><br>
 
 	  <h3><a href="index.php?cmd=ver_chat" class="btn">Romero
-	  <img src="view/images/verde.png" width=10 height=10 /></a></h3><br>
+	  <img src="view/images/verde.png" width=10 height=10 /></a>
+	  <a href="index.php?cmd=borrar_chat&id=5"><img src="view/images/equis.png" width=10 height=10 /></a>
+	  </h3><br>
 	  <div></div><br><br>
 
 	  <h3><a href="index.php?cmd=ver_chat" class="btn">Goku
-	  <img src="view/images/verde.png" width=10 height=10 /></a></h3><br>
+	  <img src="view/images/verde.png" width=10 height=10 /></a>
+	  <a href="index.php?cmd=borrar_chat&id=6"><img src="view/images/equis.png" width=10 height=10 /></a>
+	  </h3><br>
 	  <div></div><br><br>
 
 	  <h3><a href="index.php?cmd=ver_chat" class="btn">Vegeta
+	  <img src="view/images/rojo.png" width=10 height=10 /></a>
+	  <a href="index.php?cmd=borrar_chat&id=7"><img src="view/images/equis.png" width=10 height=10 /></a>
+	  </h3><br>
+	  <div></div><br><br>
+	</section>
+';
+}
+
+/*
+* Crea un nuevo chat con gente con la que nunca se ha hablado antes
+* E:
+* S:
+* SQL: select idChat, telefono from TIENE where numero not in (select telefono from TIENE )
+*/
+function show_nuevo_chat() 
+{
+    echo '
+	<section id="chats">
+	  <h3><a href="index.php?cmd=ver_chat" class="btn">Iñaki
+	  <img src="view/images/verde.png" width=10 height=10 /></a></h3><br>
+	  <div></div><br><br>
+
+	  <h3><a href="index.php?cmd=ver_chat" class="btn">Miguel
+	  <img src="view/images/rojo.png" width=10 height=10 /></a></h3><br>
+	  <div></div><br><br>
+	  
+	  <h3><a href="index.php?cmd=ver_chat" class="btn">Alex
+	  <img src="view/images/rojo.png" width=10 height=10 /></a></h3><br>
+	  <div></div><br><br>
+	  
+	  <h3><a href="index.php?cmd=ver_chat" class="btn">Robert
 	  <img src="view/images/rojo.png" width=10 height=10 /></a></h3><br>
 	  <div></div><br><br>
 	</section>
+	';
+}
 
 
-';
+function preguntar_borrar_chat()
+{
+    $chat_id = $_GET['id'];
+    show_confirm("¿Quieres borrar la conversación con el identificador $chat_id?");
+    return true;
+}
 
+function show_borrar_chat()
+{
+    $chat_id = $_GET['id'];
+    if (preguntar_borrar_chat()) {
+        echo "<p class=\"centro\">Has borrado el chat con el identificador $chat_id</p>";
+    }
+
+    show_chats();
 }
 
 /*
@@ -123,6 +181,17 @@ function show_chats()
 function show_msg($msg)
 {
     echo "<script type='text/javascript'>alert('" . $msg . "');</script>";
+}
+
+/*
+*	Muestra un mensaje de tipo confirm
+*	E: $msg (mensaje que se quiere mostrar en confirm)
+*	S:
+*	SQL:
+*/
+function show_confirm($msg)
+{
+    echo "<script type='text/javascript'>confirm('" . $msg . "');</script>";
 }
 
 

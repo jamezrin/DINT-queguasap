@@ -2,7 +2,6 @@ body, #principal {
     background: #F0FFF0;
 }
 
-
 #principal {
     width: 900px;
     height: auto;
@@ -67,6 +66,9 @@ button {
     background: #7fe0a9;
 }
 
+.centro {
+    text-align: center;
+}
 
 #logo {
     margin-top: 50px;
@@ -78,16 +80,11 @@ button {
 }
 
 .menu {
-    width: 900px;
     overflow: hidden;
-    height: 65px;
     border: 0px solid #ccc;
-    margin-top: 50px;
-    margin-bottom: 20px;
-    margin-left: 250px;
+    margin: 0 auto;
     text-align: center;
     border-radius: 5px 5px 5px 5px;
-
 }
 
 .config {
@@ -157,7 +154,7 @@ button {
 }
 
 .menu ul li a:hover {
-/ / hover para cambiar estilo al pasar por encima el raton background: #006699;
+    /* hover para cambiar estilo al pasar por encima el raton background: #006699; */
     color: #aaa;
     transition: background 1s, color 1s;
 }
@@ -281,7 +278,7 @@ button {
 }
 
 #chats h3 a:hover {
-/ / hover para cambiar estilo al pasar por encima el raton background: #006699;
+    /* hover para cambiar estilo al pasar por encima el raton background: #006699; */
     color: #aaa;
     transition: background 1s, color 1s;
 }
@@ -652,7 +649,7 @@ button {
 }
 
 .leer_mas:hover {
-/ / hover para cambiar estilo al pasar por encima el raton background: #006699;
+    /* hover para cambiar estilo al pasar por encima el raton background: #006699; */
     color: #aaa;
     transition: background 1s, color 1s;
 }
