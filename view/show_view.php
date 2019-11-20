@@ -157,7 +157,9 @@ function show_nuevo_chat()
 	';
 }
 
-
+/*
+ * Pregunta si el usuario quiere eliminar el chat en contexto
+ */
 function preguntar_borrar_chat()
 {
     $chat_id = $_GET['id'];
@@ -165,6 +167,9 @@ function preguntar_borrar_chat()
     return true;
 }
 
+/*
+ * Muestra una notificación cuando se ha borrado un chat
+ */
 function show_borrar_chat()
 {
     $chat_id = $_GET['id'];
