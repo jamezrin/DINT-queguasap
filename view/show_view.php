@@ -177,7 +177,7 @@ function preguntar_borrar_chat($chat_id)
 function show_borrar_chat($chat_id)
 {
     if (preguntar_borrar_chat($chat_id)) {
-        if (borrar_chat_ok($chat_id)) {
+        if (borrar_chat_ok()) {
             echo "<p class=\"centro\">Has borrado el chat con el identificador $chat_id</p>";
         } else {
             echo "<p class=\"centro\">No se ha podido borrar ese chat</p>";
@@ -354,29 +354,27 @@ function show_ajustes()
 }
 
 function show_register() {
-
     echo ' 
         <section id="slider">
         <h2>Registrate</h2>
             <form action="" method="post">
                   <div>
-                      <label>Nombre de usuario</label>
-                      <input type="text" placeholder="Nombre de usuario">
+                      <label>Numero de telefono</label>
+                      <input type="text" placeholder="Numero de telefono" name="telefono">
                   </div>
                   <div>
                       <label>Contraseña</label>
-                      <input type="password" placeholder="Contraseña">
+                      <input type="password" name="password" placeholder="Contraseña">
                   </div>
                   <div>
                       <label>Confirmar Contraseña</label>
-                      <input type="password" placeholder="Confirmar Contraseña">
+                      <input type="password_confirm" name="password_confirm" placeholder="Confirmar Contraseña">
                   </div>
                   <div>
                       <label>Foto de perfil</label>
-                      <input type="file" name="imagen" >
+                      <input type="file" name="imagen_perfil" >
                   </div>
                   <button type="submit" name="alta_usuario">Registrarse</button>
-                  
             </form>
         </section>
     ';
