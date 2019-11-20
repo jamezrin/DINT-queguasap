@@ -56,7 +56,8 @@ function show_content()
                         break;
 
                     case 'borrar_chat':
-                        show_borrar_chat();
+                        $chat_id = $_GET['id'];
+                        show_borrar_chat($chat_id);
                         break;
 
                     default:
@@ -71,32 +72,30 @@ function show_content()
         }
     } else {                                        // POST
         if (isset($_POST['login'])) {
-
             if (login_ok()) {
-
                 show_chats();
             } else {
                 show_msg("Error no enviado");
             }
-
         }
 
-        if (isset($_POST['registrarUsuario'])) {
-
-            if (registro()) {
-
-                show_msg("Usuario registrado");
-                show_loging();
+        if (isset($_POST['alta_usuario'])) {
+            if (validar_datos_registro()) {
+                if (alta_usuario_ok()) {
+                    show_msg("Usuario registrado");
+                    show_loging();
+                } else {
+                    show_msg("No se ha podido dar de alta a ese usuario");
+                    show_register();
+                }
             } else {
+                show_msg("Los datos que has introducido no son validos");
                 show_register();
             }
-
         }
 
         if (isset($_POST['contestar'])) {
-
             if (tamaño_img()) {
-
                 if (guardar_mensaje()) {
                     show_msg("Mensaje enviado");
                     show_chats();
@@ -110,21 +109,16 @@ function show_content()
         }
 
         if (isset($_POST['editar'])) {
-
             if (maximo_caracteres_estado()) {
-
                 if (editar_perfil()) {
                     show_msg("Perfil editado");
                     show_chats();
                 } else {
                     show_msg("Error no editado");
                 }
-
             } else {
                 show_msg("Error máximo de caracteres");
             }
-
-
         }
 
         if (isset($_POST['guardar_color'])) {
@@ -152,8 +146,8 @@ function show_content()
 
 /*
 * Realiza algunas acciones según esté la sesión abierta o no
-* E: 
-* S: 
+* E:
+* S:
 * SQL:
 */
 function actualizar_sesion()

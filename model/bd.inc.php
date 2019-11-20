@@ -2,9 +2,9 @@
 
 /*
 *	Conexión a la base de datos
-*	E:
+*	E: nada (lee directamente)
 *	S: conn (variable de tipo connection)
-*	SQL:
+*	SQL: nada
 */
 function connection()
 {
@@ -13,12 +13,10 @@ function connection()
 
 /*
 *	Comprueba login
-*	E:
+*	E: nada (lee directamente)
 *	S: booleano: conexión correcta
 *	SQL: select * from usuarios WHERE ...
 */
-
-
 function login_ok()
 {
     return true;
@@ -27,9 +25,9 @@ function login_ok()
 
 /*
 *	Función para terminar la sesión
-*	E:
-*	S:
-*	SQL:
+*	E: nada
+*	S: nada
+*	SQL: nada
 */
 function unset_session()
 {
@@ -38,8 +36,8 @@ function unset_session()
 
 /*
 *	Guardar el mensaje en la BD
-*	E:
-*	S:boolean: operación correcta
+*	E: nada (lee directamente)
+*	S: boolean: operación correcta
 *	SQL: INSERT into Mensaje (texto) values (?);	SELECT idMensaje, texto, fecha, hora, fichero, telefono from Mensajes
 */
 function guardar_mensaje()
@@ -72,9 +70,9 @@ function maximo_caracteres_estado()
 
 /*
 *	Guarda el color seleccionado en el fichero de configuración
-*	E:
-*	S: c
-*	SQL:
+*	E: nada
+*	S: boolean: si se ha podido guardar el color o no
+*	SQL: nada
 */
 function color_seleccionado()
 {
@@ -86,7 +84,7 @@ function color_seleccionado()
 * 	imagen estara en el fichero de configuración
 *	E:
 *	S: booleano: tamaño correcto
-*	SQL: 
+*	SQL: nada
 */
 function tamaño_img()
 {
@@ -98,14 +96,42 @@ function tamaño_img()
 *	Funcion que guarda el chat en un fichero backup.txt
 *	E:
 *	S: booleano: guardado correctamente
-*	SQL:
+*	SQL: SELECT * FROM Chats WHERE ChatId = $chat_id
 */
 function backup_chat()
 {
     return true;
 }
 
-function registro()
+/*
+*	Función que da de alta un usuario
+*	E:
+*	S: booleano: guardado correctamente
+*	SQL: INSERT INTO Usuarios VALUES ($telefono, $contraseña, $imagenPerfil)
+*/
+function alta_usuario_ok()
+{
+    return true;
+}
+
+/*
+*   Función que intenta borrar un chat de la base de datos
+ *  E: $chat_id (el identificador del chat)
+ *  S: boolean: si se ha podido borrar el chat o no
+ *  SQL: DELETE FROM Chats WHERE ChatId = $chat_id
+*/
+function borrar_chat_ok($chat_id)
+{
+    return true;
+}
+
+/*
+ * Función que valida los datos al registrarse
+ * E: nada (lee los datos directamente)
+ * S: boolean: datos son validos
+ * SQL: nada
+ */
+function validar_datos_registro()
 {
     return true;
 }

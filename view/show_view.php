@@ -2,8 +2,8 @@
 
 /*
 *	Muestra el menú
-*	E:
-*	S:
+*	E: nada
+*	S: nada
 *	SQL: select logo, texto from usuario
 */
 function show_menu()
@@ -45,9 +45,9 @@ function show_menu()
 
 /*
 *	Muestra el formulario de contacto
-*	E:
-*	S:
-*	SQL:
+*	E: nada
+*	S: nada
+*	SQL: nada
 */
 function show_loging()
 {
@@ -75,8 +75,8 @@ function show_loging()
 
 /*
 * Muestra los diferentes tipos de chat
-* E:
-* S:
+* E: nada
+* S: nada
 * SQL: select idChat, telefono from TIENE where numero =  $_SESSION['user'];
 */
 function show_chats()
@@ -130,8 +130,8 @@ function show_chats()
 
 /*
 * Crea un nuevo chat con gente con la que nunca se ha hablado antes
-* E:
-* S:
+* E: nada
+* S: nada
 * SQL: select idChat, telefono from TIENE where numero not in (select telefono from TIENE )
 */
 function show_nuevo_chat() 
@@ -159,22 +159,29 @@ function show_nuevo_chat()
 
 /*
  * Pregunta si el usuario quiere eliminar el chat en contexto
+ * E: $chat_id (el identificador del chat)
+ * S: nada
  */
-function preguntar_borrar_chat()
+function preguntar_borrar_chat($chat_id)
 {
-    $chat_id = $_GET['id'];
     show_confirm("¿Quieres borrar la conversación con el identificador $chat_id?");
     return true;
 }
 
 /*
- * Muestra una notificación cuando se ha borrado un chat
+ * Pide confirmación si quiere borar el chat y lo borra
+ * E: $chat_id (el identificador del chat)
+ * S: nada
+ * SQL: nada
  */
-function show_borrar_chat()
+function show_borrar_chat($chat_id)
 {
-    $chat_id = $_GET['id'];
-    if (preguntar_borrar_chat()) {
-        echo "<p class=\"centro\">Has borrado el chat con el identificador $chat_id</p>";
+    if (preguntar_borrar_chat($chat_id)) {
+        if (borrar_chat_ok($chat_id)) {
+            echo "<p class=\"centro\">Has borrado el chat con el identificador $chat_id</p>";
+        } else {
+            echo "<p class=\"centro\">No se ha podido borrar ese chat</p>";
+        }
     }
 
     show_chats();
@@ -183,8 +190,7 @@ function show_borrar_chat()
 /*
 *	Muestra un mensaje de tipo alert
 *	E: $msg (mensaje que se quiere mostrar en alert)
-*	S:
-*	SQL:
+*	S: nada
 */
 function show_msg($msg)
 {
@@ -194,8 +200,7 @@ function show_msg($msg)
 /*
 *	Muestra un mensaje de tipo confirm
 *	E: $msg (mensaje que se quiere mostrar en confirm)
-*	S:
-*	SQL:
+*	S: nada
 */
 function show_confirm($msg)
 {
@@ -205,8 +210,8 @@ function show_confirm($msg)
 
 /*
 * Muestra el chat del contacto con los mensajes y el estado del contacto
-* E:
-* S:
+* E: nada
+* S: nada
 * SQL: select idMensaje, texto, fecha, hora, fichero, idChat, telefono from mensajes 
 */
 
@@ -214,10 +219,10 @@ function show_contacto_chat()
 {
     echo '
 
-			   <section id="datosP">
-				  <section class="datosU">
-				<img src="view/images/chica.jpg" class="imgRedonda"/>
-				<h3>Fulanito: Trabajando</h3><br><br><br>
+           <section id="datosP">
+              <section class="datosU">
+            <img src="view/images/chica.jpg" class="imgRedonda"/>
+            <h3>Fulanito: Trabajando</h3><br><br><br>
 
 			<section class="mensajeU">
 			  <h4>Fulanito  19/05/20119  10:35</h4>
@@ -353,7 +358,7 @@ function show_register() {
     echo ' 
         <section id="slider">
         <h2>Registrate</h2>
-            <form action="index.php?" method="post">
+            <form action="" method="post">
                   <div>
                       <label>Nombre de usuario</label>
                       <input type="text" placeholder="Nombre de usuario">
@@ -363,10 +368,14 @@ function show_register() {
                       <input type="password" placeholder="Contraseña">
                   </div>
                   <div>
+                      <label>Confirmar Contraseña</label>
+                      <input type="password" placeholder="Confirmar Contraseña">
+                  </div>
+                  <div>
                       <label>Foto de perfil</label>
                       <input type="file" name="imagen" >
                   </div>
-                  <button type="submit" name="registrarUsuario">Registrarse</button>
+                  <button type="submit" name="alta_usuario">Registrarse</button>
                   
             </form>
         </section>
