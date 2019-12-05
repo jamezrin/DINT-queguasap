@@ -115,21 +115,25 @@ function alta_usuario_ok()
 }
 
 /*
-*   Función que intenta borrar un chat de la base de datos
- *  E: $chat_id (el identificador del chat)
+*   Función que borra un chat de la base de datos
+ *  E:
  *  S: boolean: si se ha podido borrar el chat o no
  *  SQL: DELETE FROM Chats WHERE ChatId = $chat_id
 */
-function borrar_chat_ok($chat_id)
+function borrar_chat_ok()
 {
     return true;
 }
 
 /*
- * Función que valida los datos al registrarse
+ * Función que valida los datos al registrarse:
+ * asdf
+ * sdf
+ * sdfsd
+ *
  * E: nada (lee los datos directamente)
  * S: boolean: datos son validos
- * SQL: nada
+ * SQL:
  */
 function validar_datos_registro()
 {
