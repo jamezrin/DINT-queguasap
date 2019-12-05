@@ -5,7 +5,7 @@ USE queguasap;
 CREATE TABLE usuarios (
     telefono VARCHAR(9),
     nombre VARCHAR(50),
-    contrasena VARCHAR(50),
+    contrasena VARCHAR(255),
     conectado BOOLEAN,
     imagen VARCHAR(100),
     color_fondo VARCHAR(7),

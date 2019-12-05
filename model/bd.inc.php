@@ -2,13 +2,24 @@
 
 /*
 *	Conexión a la base de datos
-*	E: nada (lee directamente)
+*	E:
 *	S: conn (variable de tipo connection)
 *	SQL: nada
 */
 function connection()
 {
-    return true;
+    global $config;
+
+    $conn = new mysqli(
+        $config['DB_HOST'],
+        $config['DB_USER'],
+        $config['DB_PASSWORD'],
+        $config['DB_NAME']
+    );
+
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+    return $conn;
 }
 
 /*
@@ -106,12 +117,37 @@ function backup_chat()
 /*
 *	Función que da de alta un usuario
 *	E:
-*	S: booleano: guardado correctamente
+*	S: int: codigo de error
 *	SQL: INSERT INTO Usuarios VALUES ($telefono, $contraseña, $imagenPerfil)
 */
-function alta_usuario_ok()
+function alta_usuario_ok($telefono, $contrasena, $nombre, $imagen)
 {
-    return true;
+    $conn = connection();
+    //move_uploaded_file($imagen[''])
+    $ruta_imagen = "uhmm";
+    $conectado = 0;
+    $color_fondo = "#202020";
+    $estado = "Hey there I am using queguasap";
+    $hash_contrasena = password_hash($contrasena, PASSWORD_BCRYPT);
+
+    try {
+        $stmt = $conn->prepare("INSERT INTO usuarios VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssisss",
+            $telefono,
+            $nombre,
+            $hash_contrasena,
+            $conectado,
+            $ruta_imagen,
+            $color_fondo,
+            $estado
+        );
+
+        $stmt->execute();
+        $stmt->close();
+        return 0;
+    } catch (Exception $e) {
+        return $e->getCode();
+    }
 }
 
 /*
@@ -127,17 +163,31 @@ function borrar_chat_ok()
 
 /*
  * Función que valida los datos al registrarse:
- * asdf
- * sdf
- * sdfsd
  *
- * E: nada (lee los datos directamente)
- * S: boolean: datos son validos
+ * E: $telefono, $contrasena, $contrasena_confirm, $nombre, $imagen
+ * S: string: mensaje de error, o nulo si se ha validado OK
  * SQL:
  */
-function validar_datos_registro()
+function validar_datos_registro($telefono, $contrasena, $contrasena_confirm, $nombre, $imagen)
 {
-    return true;
-}
+    // todo validar que numero tiene 9 digitos y sea solo numeros
 
-?>
+    if ($telefono === '' || $contrasena === ''
+        || $contrasena_confirm === '' || $nombre === '') {
+        return "Tienes que rellenar todos los campos";
+    }
+
+    if ($contrasena !== $contrasena_confirm) {
+        return 'Las contraseñas no son iguales';
+    }
+
+    if ($imagen['error'] === UPLOAD_ERR_OK) {
+        if ($imagen['type'] !== "image/png" ||
+            $imagen['type'] !== "image/gif" ||
+            $imagen['type'] !== "image/jpeg") {
+            return "La imagen de perfil que has subido no es valida";
+        }
+    }
+
+    return null;
+}

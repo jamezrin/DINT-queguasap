@@ -76,9 +76,28 @@ function show_content()
             } else {
                 show_msg("Error no enviado");
             }
-        }
+        } else if (isset($_POST['alta_usuario'])) {
+            $telefono = $_POST['telefono'];
+            $contrasena = $_POST['password'];
+            $contrasena_confirm = $_POST['password_confirm'];
+            $nombre = $_POST['nombre'];
+            $imagen = $_FILES['imagen_perfil'];
 
-        if (isset($_POST['alta_usuario'])) {
+            $error_validacion = validar_datos_registro($telefono, $contrasena,
+                $contrasena_confirm, $nombre, $imagen);
+
+            if ($error_validacion) {
+                show_msg($error_validacion);
+            } else {
+                $error_alta = alta_usuario_ok($telefono, $contrasena, $nombre, $imagen);
+                if ($error_alta) {
+                    show_msg(mapear_error_sql($error_alta));
+                } else {
+                    show_msg('Has sido dado de alta correctamente');
+                }
+
+            }
+/*
             if (validar_datos_registro()) {
                 if (alta_usuario_ok()) {
                     show_msg("Usuario registrado");
@@ -90,10 +109,8 @@ function show_content()
             } else {
                 show_msg("Los datos que has introducido no son validos");
                 show_register();
-            }
-        }
-
-        if (isset($_POST['contestar'])) {
+            }*/
+        } else if (isset($_POST['contestar'])) {
             if (tamaño_img()) {
                 if (guardar_mensaje()) {
                     show_msg("Mensaje enviado");
@@ -105,9 +122,7 @@ function show_content()
             } else {
                 show_msg("Error imagen demasiado grande 20mb como maximo");
             }
-        }
-
-        if (isset($_POST['editar'])) {
+        } else if (isset($_POST['editar'])) {
             if (maximo_caracteres_estado()) {
                 if (editar_perfil()) {
                     show_msg("Perfil editado");
@@ -118,9 +133,7 @@ function show_content()
             } else {
                 show_msg("Error máximo de caracteres");
             }
-        }
-
-        if (isset($_POST['guardar_color'])) {
+        } else if (isset($_POST['guardar_color'])) {
 
             if (color_seleccionado()) {
                 show_msg("Color cambiado");
@@ -128,9 +141,7 @@ function show_content()
             } else {
                 show_msg("Error no se cambio de color");
             }
-        }
-
-        if (isset($_POST['backup'])) {
+        } else if (isset($_POST['backup'])) {
 
             if (backup_chat()) {
                 show_msg("backup guardado");
@@ -152,28 +163,26 @@ function show_content()
 function actualizar_sesion()
 {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
         if (isset($_POST['login'])) {
-
             if (login_ok()) {
                 $_SESSION['user'] = $_POST['numero'];
             }
-
         }
-
     } else {
-
         if (isset($_GET['cmd'])) {
-
             if ($_GET['cmd'] == 'logout') {
-
                 unset($_SESSION);
                 session_destroy();
             }
-
         }
     }
 }
 
-
+function mapear_error_sql($codigo_error) {
+    switch ($codigo_error) {
+        case 1406: return "Se ha introducido un campo no valido";
+        case 1062: return "Ya existe un usuario con ese telefono";
+        default: return $codigo_error;
+    }
+}
 ?>

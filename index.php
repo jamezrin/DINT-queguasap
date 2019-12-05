@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 session_start();
 
-$config = parse_ini_file("configuration.txt");
+$config = parse_ini_file("config.ini");
 
 include_once 'model/bd.inc.php';
 

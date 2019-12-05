@@ -357,27 +357,29 @@ function show_register() {
     echo ' 
         <section id="slider">
         <h2>Registrate</h2>
-            <form action="" method="post">
+            <form enctype="multipart/form-data" action="" method="post">
                   <div>
                       <label>Numero de telefono</label>
-                      <input type="text" placeholder="Numero de telefono" name="telefono">
+                      <input type="text" placeholder="Numero de telefono" id="telefono" name="telefono">
                   </div>
                   <div>
                       <label>Contraseña</label>
-                      <input type="password" name="password" placeholder="Contraseña">
+                      <input type="password" name="password" id="password" placeholder="Contraseña">
                   </div>
                   <div>
                       <label>Confirmar Contraseña</label>
-                      <input type="password_confirm" name="password_confirm" placeholder="Confirmar Contraseña">
+                      <input type="password" id="password_confirm" name="password_confirm" placeholder="Confirmar Contraseña">
+                  </div>
+                   <div>
+                      <label for="nombre">Nombre de usuario</label>
+                      <input type="text" id="nombre" name="nombre" placeholder="Tu nombre de usuario">
                   </div>
                   <div>
-                      <label>Foto de perfil</label>
-                      <input type="file" name="imagen_perfil" >
+                      <label for="imagen_perfil">Foto de perfil</label>
+                      <input type="file" name="imagen_perfil" id="imagen_perfil" >
                   </div>
                   <button type="submit" name="alta_usuario">Registrarse</button>
             </form>
         </section>
     ';
 }
-
-?>
