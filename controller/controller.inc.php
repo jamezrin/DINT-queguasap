@@ -1,5 +1,4 @@
 <?php
-
 /*
 *	Muestra el contenido de la parte central de la página
 *	E:
