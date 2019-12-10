@@ -5,8 +5,7 @@
 *	S:
 *	SQL:
 */
-function show_content()
-{
+function show_content() {
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {    // GET
         if (!isset($_GET['cmd'])) {                // carga inicial de la página
             show_login();
@@ -205,11 +204,11 @@ function validar_datos_registro($telefono, $contrasena, $contrasena_confirm, $no
 function actualizar_sesion() {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST['login'])) {
-            $telefono = $_POST['numero'];
-            $contrasena = $_POST['pass_user'];
+            $telefono = $_POST['telefono'];
+            $contrasena = $_POST['contrasena'];
 
             if (inicio_usuario_ok($telefono, $contrasena)) {
-                $_SESSION['user'] = $_POST['numero'];
+                $_SESSION['telefono'] = $telefono;
             }
         }
     } else {

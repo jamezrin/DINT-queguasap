@@ -2,4 +2,4 @@
 *.iml
 content/attachments/*
 content/profile_images/*
-config.ini
+./config.ini

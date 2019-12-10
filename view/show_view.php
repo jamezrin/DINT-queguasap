@@ -6,8 +6,7 @@
 *	S: nada
 *	SQL: select logo, texto from usuario
 */
-function show_menu()
-{
+function show_menu() {
 
     if (isset($_SESSION['user'])) {
 
@@ -54,8 +53,8 @@ function show_login() {
 		<section id="slider">
 			<form action="index.php" method="post" role="form">
 					<h2>LOG IN</h2>
-					<input id="numero" type="text" name="numero" placeholder="número de telefono" required="" ><br><br>
-					<input id="pass" type="password" name="pass_user" placeholder="password" required="" ><br><br>
+					<input id="numero" type="text" name="telefono" placeholder="número de telefono" required="" ><br><br>
+					<input id="pass" type="password" name="contrasena" placeholder="password" required="" ><br><br>
 					<button type="submit" name="login">Login</button><br><br>    
 			</form>
 			
