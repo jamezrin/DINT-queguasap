@@ -8,12 +8,15 @@
 */
 function show_menu() {
     if (isset($_SESSION['telefono'])) {
+        $estado = consultar_estado();
         echo '
+            
             <header>
-
                 <section id="estado">
                   <img src="view/images/f.jpg" class="imgRedonda"/><br>
-                  <p>I am working</p>
+                  <p>';
+                    echo "$estado";
+                    echo '</p>
                 </section>
     
                 <nav class="menu">
@@ -26,7 +29,8 @@ function show_menu() {
                     <li><a href="index.php?cmd=logout" class="btn">Logout</a></li>
                   </ul>
                 </nav>
-		   </header>';
+		   </header>;';
+
     } else {
         echo '
             <header>
@@ -275,11 +279,13 @@ function show_perfil() {
     
               <span>Cambiar imagen de perfil<input type="file" name="b1" multiple></span>
               
+              <button type="submit" name="editar_imagen" >Editar Imagen</button>
               <br><br>
-              
-              <textarea id="ta" rows="5" cols="40" required="" maxlength="' . $long_texto . '" style="resize: none;">I am working</textarea><br><br>
+             </form>
+             <form id="vb" action="index.php" method="post" role="form">
+              <textarea id="ta" name="estado_nuevo" rows="5" cols="40" required="" maxlength="' . $long_texto . '" style="resize: none;">I am working</textarea><br><br>
                
-              <button type="submit" name="editar" >Editar</button>
+              <button type="submit" name="editar" >Editar Estado</button>
         
             </form>
         </section>';
