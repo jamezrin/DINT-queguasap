@@ -294,19 +294,19 @@ function show_perfil() {
 function show_ajustes() {
     echo '
         <section id="ajustes">
-            <form id="vb" action="index.php" method="post" role="form">
+            <form id="vb" action="index.php" method="POST" role="form">
         
               <h4>Selecciona un color de fondo
-                  <select name="order" method="GET">
-                            <option value="entry_select_todo">Rojo</option>
-                            <option value="entry_select_pavo">Verde</option>
-                            <option value="entry_select_memo">Azul</option>
-                            <option value="entry_select_memo">Blanco</option>
-                            <option value="entry_select_memo">Rosa</option>
+                  <select name="color">
+                        <option value="rojo">Rojo</option>
+                        <option value="verde">Verde</option>
+                        <option value="azul">Azul</option>
+                        <option value="blanco">Blanco</option>
+                        <option value="rosa">Rosa</option>
                   </select>
               </h4>
         
-              <button type="submit" name="guardar_color" >Guardar</button>
+              <button type="submit" name="guardar_color">Guardar</button>
             </form>
         </section>';
 }
