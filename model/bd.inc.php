@@ -118,10 +118,9 @@ function backup_chat()
 *	Función que da de alta un usuario
 *	E:
 *	S: int: codigo de error
-*	SQL: INSERT INTO Usuarios VALUES ($telefono, $contraseña, $imagenPerfil)
+*	SQL: INSERT INTO usuarios VALUES ($telefono, $contraseña, $nombre, $nombre_imagen)
 */
-function alta_usuario_ok($telefono, $contrasena, $nombre, $nombre_imagen)
-{
+function alta_usuario_ok($telefono, $contrasena, $nombre, $nombre_imagen) {
     $conn = connection();
     $conectado = 0;
     $color_fondo = "#202020";
@@ -148,13 +147,31 @@ function alta_usuario_ok($telefono, $contrasena, $nombre, $nombre_imagen)
     }
 }
 
+function inicio_usuario_ok($telefono, $contrasena) {
+    $conn = connection();
+
+    try {
+        $stmt = $conn->prepare("SELECT * FROM usuarios WHERE telefono = ?");
+        $stmt->bind_param("s", $telefono);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $rows = $result->fetch_assoc();
+        $hash_contrasena = $rows['contrasena'];
+        $stmt->close();
+
+        return password_verify($contrasena, $hash_contrasena);;
+    } catch (Exception $e) {
+        return $e->getCode();
+    }
+}
+
 /*
 *   Función que borra un chat de la base de datos
  *  E:
  *  S: boolean: si se ha podido borrar el chat o no
  *  SQL: DELETE FROM Chats WHERE ChatId = $chat_id
 */
-function borrar_chat_ok()
-{
+function borrar_chat_ok() {
     return true;
 }

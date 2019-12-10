@@ -49,8 +49,7 @@ function show_menu()
 *	S:
 *	SQL:
 */
-function show_login()
-{
+function show_login() {
     echo '
 		<section id="slider">
 			<form action="index.php" method="post" role="form">
@@ -74,8 +73,7 @@ function show_login()
 * S: nada
 * SQL: select idChat, telefono from TIENE where numero =  $_SESSION['user'];
 */
-function show_chats()
-{
+function show_chats() {
     echo '
 	<section id="chats">
 	  <h3><a href="index.php?cmd=ver_chat" class="btn">Fulanito

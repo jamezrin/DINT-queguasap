@@ -66,15 +66,17 @@ function show_content()
             } else {
                 show_login();
             }
-
-
         }
-    } else {                                        // POST
+    } else {
         if (isset($_POST['login'])) {
-            if (login_ok()) {
+            $telefono = $_POST['numero'];
+            $contrasena = $_POST['pass_user'];
+
+            if (inicio_usuario_ok($telefono, $contrasena)) {
                 show_chats();
             } else {
                 show_msg("Error no enviado");
+                show_login();
             }
         } else if (isset($_POST['alta_usuario'])) {
             $telefono = $_POST['telefono'];
@@ -157,20 +159,19 @@ function show_content()
     }
 }
 
-function imagen_subida($imagen)
-{
+function imagen_subida($imagen) {
     return $imagen !== null &&
         $imagen['error'] === UPLOAD_ERR_OK;
 }
 
-function generar_nombre_foto_perfil($imagen, $telefono)
-{
+
+
+function generar_nombre_foto_perfil($imagen, $telefono) {
     $extension = pathinfo($imagen['name'], PATHINFO_EXTENSION);
     return "foto-$telefono.$extension";
 }
 
-function validar_datos_registro($telefono, $contrasena, $contrasena_confirm, $nombre, $imagen)
-{
+function validar_datos_registro($telefono, $contrasena, $contrasena_confirm, $nombre, $imagen) {
     if (strlen($telefono) !== 9 || !ctype_digit($telefono)) {
         return "El telefono tiene que tener 9 numeros";
     }
@@ -201,11 +202,13 @@ function validar_datos_registro($telefono, $contrasena, $contrasena_confirm, $no
 * S:
 * SQL:
 */
-function actualizar_sesion()
-{
+function actualizar_sesion() {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST['login'])) {
-            if (login_ok()) {
+            $telefono = $_POST['numero'];
+            $contrasena = $_POST['pass_user'];
+
+            if (inicio_usuario_ok($telefono, $contrasena)) {
                 $_SESSION['user'] = $_POST['numero'];
             }
         }
