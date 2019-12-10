@@ -26,6 +26,11 @@ function handle_main() {
                         show_ajustes();
                         break;
 
+                    case 'borrar_chat':
+                        $chat_id = $_GET['id'];
+                        show_borrar_chat($chat_id);
+                        break;
+
                     case 'ver_chat':
                         show_contacto_chat();
                         break;
