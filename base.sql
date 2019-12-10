@@ -18,7 +18,7 @@ CREATE TABLE envia_mensaje (
     emisor VARCHAR(9) NOT NULL,
     receptor VARCHAR(9) NOT NULL,
     texto VARCHAR(255) NOT NULL,
-    fecha DATE NOT NULL,
+    momento TIMESTAMP NOT NULL,
     archivo VARCHAR(100),
     CONSTRAINT PK_Mensaje PRIMARY KEY (id),
     FOREIGN KEY (emisor) REFERENCES usuarios(telefono),
@@ -39,7 +39,7 @@ INSERT INTO usuarios (telefono, nombre, contrasena, conectado, color_fondo, esta
 INSERT INTO usuarios (telefono, nombre, contrasena, conectado, color_fondo, estado) VALUES ("664739443", "Carlos", "$2y$10$d2.G3WgipvpjqtKn5Lm3N.txF3AwdZiYvSL7qPFxlBbFpRdRknr6W", false, "#317F43", "Hello there I am using queguasap");
 INSERT INTO usuarios (telefono, nombre, contrasena, conectado, color_fondo, estado) VALUES ("434525244", "Luis", "$2y$10$d2.G3WgipvpjqtKn5Lm3N.txF3AwdZiYvSL7qPFxlBbFpRdRknr6W", true, "#FF0000", "Hello there I am using queguasap");
 
-INSERT INTO envia_mensaje (emisor, receptor, texto, fecha) VALUES ("901234536", "993726392", "Hey bro que tal", CURDATE());
-INSERT INTO envia_mensaje (emisor, receptor, texto, fecha) VALUES ("846264826", "957355483", "profe no pongas falta", CURDATE());
-INSERT INTO envia_mensaje (emisor, receptor, texto, fecha) VALUES ("946589467", "901234536", "un rainbow??", CURDATE());
-INSERT INTO envia_mensaje (emisor, receptor, texto, fecha) VALUES ("957355483", "993726392", "oye porque haces esto asi", CURDATE());
+INSERT INTO envia_mensaje (emisor, receptor, texto, momento) VALUES ("901234536", "993726392", "Hey bro que tal", CURRENT_TIMESTAMP());
+INSERT INTO envia_mensaje (emisor, receptor, texto, momento) VALUES ("846264826", "957355483", "profe no pongas falta", CURRENT_TIMESTAMP());
+INSERT INTO envia_mensaje (emisor, receptor, texto, momento) VALUES ("946589467", "901234536", "un rainbow??", CURRENT_TIMESTAMP());
+INSERT INTO envia_mensaje (emisor, receptor, texto, momento) VALUES ("957355483", "993726392", "oye porque haces esto asi", CURRENT_TIMESTAMP());
