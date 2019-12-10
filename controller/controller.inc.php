@@ -31,7 +31,7 @@ function show_content() {
                         "error de conexión";
                         break;
                 }
-            } elseif (isset ($_SESSION["user"])) {
+            } elseif (isset ($_SESSION["telefono"])) {
                 switch ($_GET['cmd']) {
                     case 'chat':
                         show_chats();
@@ -219,4 +219,8 @@ function actualizar_sesion() {
             }
         }
     }
+}
+
+function sesion_iniciada() {
+    return isset($_SESSION["telefono"]);
 }
