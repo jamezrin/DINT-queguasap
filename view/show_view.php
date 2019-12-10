@@ -7,17 +7,24 @@
 *	SQL: select logo, texto from usuario
 */
 function show_menu() {
-    if (isset($_SESSION['telefono'])) {
-        $estado = consultar_estado();
+    if (sesion_iniciada()) {
+        $telefono = $_SESSION['telefono'];
+        $info = consultar_usuario($telefono);
+
+        $estado = $info['estado'];
+        $imagen_perfil = "view/images/f.jpg";
+        if ($info['imagen'] !== null) {
+            $imagen_perfil = "content/profile_images/" . $info['imagen'];
+        }
+
         echo "
             <header>
                 <section id=\"estado\">
-                  <img src=\"view/images/f.jpg\" class=\"imgRedonda\"/><br>
+                  <img src=\"$imagen_perfil\" class=\"imgRedonda\"/><br>
                   <p>$estado</p>
                 </section>
     
                 <nav class=\"menu\">
-    
                   <ul>
                     <li><a href=\"index.php?cmd=chat\" class=\"btn\">Chats activos</a></li>
                     <li><a href=\"index.php?cmd=nuevo_chat\" class=\"btn\">Nuevo chat</a></li>
@@ -28,7 +35,6 @@ function show_menu() {
                   </ul>
                 </nav>
 		   </header>";
-
     } else {
         echo '
             <header>

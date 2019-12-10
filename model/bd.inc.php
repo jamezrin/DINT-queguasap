@@ -195,25 +195,21 @@ function cambiar_conectado($telefono, $conectado) {
     }
 }
 
-function consultar_estado() {
+function consultar_usuario($telefono) {
     $conn = connection();
 
-    $telefono = $_SESSION['telefono'];
-
     try {
-        $stmt = $conn->prepare("SELECT estado FROM usuarios WHERE telefono = ?");
+        $stmt = $conn->prepare("SELECT * FROM usuarios WHERE telefono = ?");
         $stmt->bind_param("s", $telefono);
 
         $stmt->execute();
         $result = $stmt->get_result();
-        $rows = $result->fetch_assoc();
-        $estado = $rows["estado"];
+        $resultado = $result->fetch_assoc();
         $stmt->close();
+        return $resultado;
     } catch (Exception $e) {
         return $e->getCode();
     }
-
-    return $estado;
 }
 
 /*

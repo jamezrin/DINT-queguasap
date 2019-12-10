@@ -22,4 +22,3 @@ handle_main();
 show_footer();
 
 
-?>
