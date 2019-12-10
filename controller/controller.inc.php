@@ -5,33 +5,10 @@
 *	S:
 *	SQL:
 */
-function show_content() {
-    if ($_SERVER['REQUEST_METHOD'] == 'GET') {    // GET
-        if (!isset($_GET['cmd'])) {                // carga inicial de la página
-            show_login();
-        } else {
-            if ($_GET["cmd"] === "start"
-                || $_GET["cmd"] === "logout"
-                || $_GET["cmd"] === "registrarse") {
-                switch ($_GET['cmd']) {
-                    case 'start':
-                        show_login();
-                        break;
-
-                    case 'logout':
-                        show_login();
-                        show_msg("Ha cerrado la sesión");
-                        break;
-
-                    case 'registrarse':
-                        show_register();
-                        break;
-
-                    default:
-                        "error de conexión";
-                        break;
-                }
-            } elseif (isset ($_SESSION["telefono"])) {
+function handle_main() {
+    if (sesion_iniciada()) {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            if (isset($_GET["cmd"])) {
                 switch ($_GET['cmd']) {
                     case 'chat':
                         show_chats();
@@ -39,10 +16,6 @@ function show_content() {
 
                     case 'nuevo_chat':
                         show_nuevo_chat();
-                        break;
-
-                    case 'ver_chat':
-                        show_contacto_chat();
                         break;
 
                     case 'perfil':
@@ -53,108 +26,128 @@ function show_content() {
                         show_ajustes();
                         break;
 
-                    case 'borrar_chat':
-                        $chat_id = $_GET['id'];
-                        show_borrar_chat($chat_id);
+                    case 'ver_chat':
+                        show_contacto_chat();
+                        break;
+
+                    case 'logout':
+                        show_login();
+                        show_msg("Ha cerrado la sesión");
                         break;
 
                     default:
-                        "error de conexión";
-                        break;
+                        show_msg('Comando no valido');
+                        show_chats();
                 }
             } else {
-                show_login();
+                show_chats();
             }
+        } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+             if (isset($_POST['contestar'])) {
+                if (tamaño_img()) {
+                    if (guardar_mensaje()) {
+                        show_msg("Mensaje enviado");
+                        show_chats();
+                    } else {
+                        show_msg("Error no enviado");
+                    }
+
+                } else {
+                    show_msg("Error imagen demasiado grande 20mb como maximo");
+                }
+            } else if (isset($_POST['editar'])) {
+                if (maximo_caracteres_estado()) {
+                    if (editar_perfil()) {
+                        show_msg("Perfil editado");
+                        show_chats();
+                    } else {
+                        show_msg("Error no editado");
+                    }
+                } else {
+                    show_msg("Error máximo de caracteres");
+                }
+            } else if (isset($_POST['guardar_color'])) {
+
+                if (color_seleccionado()) {
+                    show_msg("Color cambiado");
+                    show_chats();
+                } else {
+                    show_msg("Error no se cambio de color");
+                }
+            } else if (isset($_POST['backup'])) {
+                if (backup_chat()) {
+                    show_msg("backup guardado");
+                    show_chats();
+                } else {
+                    show_msg("Error no realizar el backup");
+                }
+            } else {
+                 show_chats();
+             }
         }
     } else {
-        if (isset($_POST['login'])) {
-            $telefono = $_POST['telefono'];
-            $contrasena = $_POST['contrasena'];
-
-            if (inicio_usuario_ok($telefono, $contrasena)) {
-                show_chats();
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            if (isset($_GET['cmd'])) {
+                switch ($_GET['cmd']) {
+                    case 'registrarse':
+                        show_register();
+                        break;
+                    default:
+                        show_login();
+                }
             } else {
-                show_msg("Has introducido un telefono o contraseña no validos");
                 show_login();
             }
-        } else if (isset($_POST['alta_usuario'])) {
-            $telefono = $_POST['telefono'];
-            $contrasena = $_POST['password'];
-            $contrasena_confirm = $_POST['password_confirm'];
-            $nombre = $_POST['nombre'];
-            $imagen = $_FILES['imagen_perfil'];
+        } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['login'])) {
+                $telefono = $_POST['telefono'];
+                $contrasena = $_POST['contrasena'];
 
-            $error_validacion = validar_datos_registro($telefono, $contrasena,
-                $contrasena_confirm, $nombre, $imagen);
-
-            if (!$error_validacion) {
-                $nombre_imagen = null;
-
-                if (imagen_subida($imagen)) {
-                    $nombre_imagen = generar_nombre_foto_perfil($imagen, $telefono);
-                    $destino_imagen = getcwd() . "/content/profile_images/$nombre_imagen";
-                    move_uploaded_file($imagen['tmp_name'], $destino_imagen);
-                }
-
-                $error_alta = alta_usuario_ok($telefono, $contrasena, $nombre, $nombre_imagen);
-                if ($error_alta) {
-                    if ($error_alta === 1406) {
-                        show_msg("Se ha introducido un campo no valido");
-                    } else if ($error_alta === 1062) {
-                        show_msg("Ya existe un usuario con ese telefono");
-                    } else {
-                        show_msg("Ha ocurrido el error al darte de alta $error_alta");
-                    }
-                    show_register();
+                if (inicio_usuario_ok($telefono, $contrasena)) {
+                    show_chats();
                 } else {
-                    show_msg('Has sido dado de alta correctamente');
+                    show_msg("Has introducido un telefono o contraseña no validos");
                     show_login();
                 }
-            } else {
-                show_msg($error_validacion);
-                show_register();
-            }
-        } else if (isset($_POST['contestar'])) {
-            if (tamaño_img()) {
-                if (guardar_mensaje()) {
-                    show_msg("Mensaje enviado");
-                    show_chats();
+            } else if (isset($_POST['alta_usuario'])) {
+                $telefono = $_POST['telefono'];
+                $contrasena = $_POST['password'];
+                $contrasena_confirm = $_POST['password_confirm'];
+                $nombre = $_POST['nombre'];
+                $imagen = $_FILES['imagen_perfil'];
+
+                $error_validacion = validar_datos_registro($telefono, $contrasena,
+                    $contrasena_confirm, $nombre, $imagen);
+
+                if (!$error_validacion) {
+                    $nombre_imagen = null;
+
+                    if (imagen_subida($imagen)) {
+                        $nombre_imagen = generar_nombre_foto_perfil($imagen, $telefono);
+                        $destino_imagen = getcwd() . "/content/profile_images/$nombre_imagen";
+                        move_uploaded_file($imagen['tmp_name'], $destino_imagen);
+                    }
+
+                    $error_alta = alta_usuario_ok($telefono, $contrasena, $nombre, $nombre_imagen);
+                    if ($error_alta) {
+                        if ($error_alta === 1406) {
+                            show_msg("Se ha introducido un campo no valido");
+                        } else if ($error_alta === 1062) {
+                            show_msg("Ya existe un usuario con ese telefono");
+                        } else {
+                            show_msg("Ha ocurrido el error al darte de alta $error_alta");
+                        }
+                        show_register();
+                    } else {
+                        show_msg('Has sido dado de alta correctamente');
+                        show_login();
+                    }
                 } else {
-                    show_msg("Error no enviado");
+                    show_msg($error_validacion);
+                    show_register();
                 }
-
-            } else {
-                show_msg("Error imagen demasiado grande 20mb como maximo");
-            }
-        } else if (isset($_POST['editar'])) {
-            if (maximo_caracteres_estado()) {
-                if (editar_perfil()) {
-                    show_msg("Perfil editado");
-                    show_chats();
-                } else {
-                    show_msg("Error no editado");
-                }
-            } else {
-                show_msg("Error máximo de caracteres");
-            }
-        } else if (isset($_POST['guardar_color'])) {
-
-            if (color_seleccionado()) {
-                show_msg("Color cambiado");
-                show_chats();
-            } else {
-                show_msg("Error no se cambio de color");
-            }
-        } else if (isset($_POST['backup'])) {
-
-            if (backup_chat()) {
-                show_msg("backup guardado");
-                show_chats();
-            } else {
-                show_msg("Error no realizar el backup");
             }
         }
-
     }
 }
 

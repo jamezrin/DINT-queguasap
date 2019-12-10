@@ -18,7 +18,7 @@ actualizar_sesion();
 
 show_header();
 show_menu();
-show_content();
+handle_main();
 show_footer();
 
 
