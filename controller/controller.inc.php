@@ -75,7 +75,7 @@ function show_content()
             if (inicio_usuario_ok($telefono, $contrasena)) {
                 show_chats();
             } else {
-                show_msg("Error no enviado");
+                show_msg("Has introducido un telefono o contraseña no validos");
                 show_login();
             }
         } else if (isset($_POST['alta_usuario'])) {
