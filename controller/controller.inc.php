@@ -48,7 +48,7 @@ function handle_main() {
                 show_chats();
             }
         } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-             if (isset($_POST['contestar'])) {
+            if (isset($_POST['contestar'])) {
                 if (tamaño_img()) {
                     if (guardar_mensaje()) {
                         show_msg("Mensaje enviado");
@@ -56,7 +56,6 @@ function handle_main() {
                     } else {
                         show_msg("Error no enviado");
                     }
-
                 } else {
                     show_msg("Error imagen demasiado grande 20mb como maximo");
                 }
@@ -72,7 +71,6 @@ function handle_main() {
                     show_msg("Error máximo de caracteres");
                 }
             } else if (isset($_POST['guardar_color'])) {
-
                 if (color_seleccionado()) {
                     show_msg("Color cambiado");
                     show_chats();
@@ -88,7 +86,7 @@ function handle_main() {
                 }
             } else {
                  show_chats();
-             }
+            }
         }
     } else {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -161,8 +159,6 @@ function imagen_subida($imagen) {
         $imagen['error'] === UPLOAD_ERR_OK;
 }
 
-
-
 function generar_nombre_foto_perfil($imagen, $telefono) {
     $extension = pathinfo($imagen['name'], PATHINFO_EXTENSION);
     return "foto-$telefono.$extension";
@@ -207,11 +203,15 @@ function actualizar_sesion() {
 
             if (inicio_usuario_ok($telefono, $contrasena)) {
                 $_SESSION['telefono'] = $telefono;
+                cambiar_conectado($telefono, true);
             }
         }
     } else {
         if (isset($_GET['cmd'])) {
             if ($_GET['cmd'] == 'logout') {
+                $telefono = $_SESSION['telefono'];
+                cambiar_conectado($telefono, false);
+
                 unset($_SESSION);
                 session_destroy();
             }

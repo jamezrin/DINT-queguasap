@@ -7,9 +7,7 @@
 *	SQL: select logo, texto from usuario
 */
 function show_menu() {
-
     if (isset($_SESSION['telefono'])) {
-
         echo '
             <header>
 

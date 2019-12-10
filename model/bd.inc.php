@@ -166,6 +166,23 @@ function inicio_usuario_ok($telefono, $contrasena) {
     }
 }
 
+function cambiar_conectado($telefono, $conectado) {
+    $conn = connection();
+
+    try {
+        $stmt = $conn->prepare("UPDATE usuarios SET conectado = ? WHERE telefono = ?");
+        $stmt->bind_param("is",
+            $conectado,
+            $telefono);
+
+        $stmt->execute();
+        $stmt->close();
+        return 0;
+    } catch (Exception $e) {
+        return $e->getCode();
+    }
+}
+
 /*
 *   Función que borra un chat de la base de datos
  *  E:
