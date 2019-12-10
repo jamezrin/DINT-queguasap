@@ -9,27 +9,25 @@
 function show_menu() {
     if (isset($_SESSION['telefono'])) {
         $estado = consultar_estado();
-        echo '
-            
+        echo "
             <header>
-                <section id="estado">
-                  <img src="view/images/f.jpg" class="imgRedonda"/><br>
-                  <p>';
-                    echo "$estado";
-                    echo '</p>
+                <section id=\"estado\">
+                  <img src=\"view/images/f.jpg\" class=\"imgRedonda\"/><br>
+                  <p>$estado</p>
                 </section>
     
-                <nav class="menu">
+                <nav class=\"menu\">
     
                   <ul>
-                    <li><a href="index.php?cmd=chat" class="btn">Chats activos</a></li>
-                    <li><a href="index.php?cmd=nuevo_chat" class="btn">Nuevo chat</a></li>
-                    <li><a href="index.php?cmd=perfil" class="btn">Perfil</a></li>
-                    <li><a href="index.php?cmd=ajustes" class="btn"><img src="view/images/ajustes.png" width=30 height=30 /></a></li>
-                    <li><a href="index.php?cmd=logout" class="btn">Logout</a></li>
+                    <li><a href=\"index.php?cmd=chat\" class=\"btn\">Chats activos</a></li>
+                    <li><a href=\"index.php?cmd=nuevo_chat\" class=\"btn\">Nuevo chat</a></li>
+                    <li><a href=\"index.php?cmd=perfil\" class=\"btn\">Perfil</a></li>
+                    <li><a href=\"index.php?cmd=ajustes\" class=\"btn\">
+                        <img src=\"view/images/ajustes.png\" width=30 height=30 /></a></li>
+                    <li><a href=\"index.php?cmd=logout\" class=\"btn\">Logout</a></li>
                   </ul>
                 </nav>
-		   </header>;';
+		   </header>";
 
     } else {
         echo '
@@ -273,22 +271,22 @@ function show_contacto_chat() {
 function show_perfil() {
     global $config;
     $long_texto = $config["LONG_TEXTO"];
-    echo '
-        <section id="perfil">
-            <form id="vb" action="index.php" method="post" role="form">
-    
-              <span>Cambiar imagen de perfil<input type="file" name="b1" multiple></span>
-              
-              <button type="submit" name="editar_imagen" >Editar Imagen</button>
-              <br><br>
-             </form>
-             <form id="vb" action="index.php" method="post" role="form">
-              <textarea id="ta" name="estado_nuevo" rows="5" cols="40" required="" maxlength="' . $long_texto . '" style="resize: none;">I am working</textarea><br><br>
-               
-              <button type="submit" name="editar" >Editar Estado</button>
-        
+    echo "
+        <section id=\"perfil\">
+            <form action=\"index.php\" method=\"POST\" role=\"form\">
+                <label for=\"imagen_perfil\">Cambiar imagen de perfil</label><br>
+                <input type=\"file\" name=\"imagen_perfil\" id=\"imagen_perfil\"><br>
+                <button type=\"submit\" name=\"editar_imagen\">Editar Imagen</button>
             </form>
-        </section>';
+             
+            <br><br>
+             
+            <form action=\"index.php\" method=\"POST\" role=\"form\">
+                <label for=\"nuevo_estado\">Cambiar estado</label><br>
+                <textarea id=\"nuevo_estado\" name=\"nuevo_estado\" rows=\"5\" cols=\"40\" required maxlength=\"$long_texto\" style=\"resize: none;\">I am working</textarea><br>
+                <button type=\"submit\" name=\"editar_estado\">Editar Estado</button>
+            </form>
+        </section>";
 }
 
 /*

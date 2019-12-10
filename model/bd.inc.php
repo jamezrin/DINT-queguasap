@@ -65,11 +65,11 @@ function guardar_mensaje()
 function editar_perfil()
 {
     $conn = connection();
-    $estado_nuevo = $_POST['estado_nuevo'];
+    $nuevo_estado = $_POST['nuevo_estado'];
     $telefono = $_SESSION['telefono'];
     try {
-        $stmt = $conn->prepare("UPDATE usuarios SET estado=? WHERE telefono = ?");
-        $stmt->bind_param("ss", $estado_nuevo,$telefono);
+        $stmt = $conn->prepare("UPDATE usuarios SET estado = ? WHERE telefono = ?");
+        $stmt->bind_param("ss", $nuevo_estado, $telefono);
 
         $stmt->execute();
         $stmt->close();

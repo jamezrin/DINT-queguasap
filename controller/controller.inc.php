@@ -59,7 +59,7 @@ function handle_main() {
                 } else {
                     show_msg("Error imagen demasiado grande 20mb como maximo");
                 }
-            } else if (isset($_POST['editar'])) {
+            } else if (isset($_POST['editar_estado'])) {
                 if (maximo_caracteres_estado()) {
                     if (editar_perfil()) {
                         show_msg("Perfil editado");
@@ -69,6 +69,15 @@ function handle_main() {
                     }
                 } else {
                     show_msg("Error máximo de caracteres");
+                }
+            } else if (isset($_POST['editar_imagen'])) {
+                $imagen = $_FILES['imagen_perfil'];
+
+                if (imagen_subida($imagen)) {
+
+                } else {
+                    show_msg("No se ha subido ninguna imagen");
+                    show_perfil();
                 }
             } else if (isset($_POST['guardar_color'])) {
                 if (color_seleccionado()) {
