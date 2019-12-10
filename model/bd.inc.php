@@ -64,7 +64,20 @@ function guardar_mensaje()
 */
 function editar_perfil()
 {
-    return true;
+    $conn = connection();
+    $estado_nuevo = $_POST['estado_nuevo'];
+    $telefono = $_SESSION['telefono'];
+    try {
+        $stmt = $conn->prepare("UPDATE usuarios SET estado=? WHERE telefono = ?");
+        $stmt->bind_param("ss", $estado_nuevo,$telefono);
+
+        $stmt->execute();
+        $stmt->close();
+        return true;
+    } catch (Exception $e) {
+        return $e->getCode();
+    }
+
 }
 
 /*
@@ -164,6 +177,26 @@ function inicio_usuario_ok($telefono, $contrasena) {
     } catch (Exception $e) {
         return $e->getCode();
     }
+}
+
+function consultar_estado() {
+
+    $conn = connection();
+    $telefono = $_SESSION['telefono'];
+    try {
+        $stmt = $conn->prepare("SELECT estado FROM usuarios WHERE telefono = ?");
+        $stmt->bind_param("s", $telefono);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $rows = $result->fetch_assoc();
+        $estado = $rows["estado"];
+        $stmt->close();
+    } catch (Exception $e) {
+        return $e->getCode();
+    }
+
+    return $estado;
 }
 
 /*
