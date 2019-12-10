@@ -120,14 +120,12 @@ function backup_chat()
 *	S: int: codigo de error
 *	SQL: INSERT INTO Usuarios VALUES ($telefono, $contraseña, $imagenPerfil)
 */
-function alta_usuario_ok($telefono, $contrasena, $nombre, $imagen)
+function alta_usuario_ok($telefono, $contrasena, $nombre, $nombre_imagen)
 {
     $conn = connection();
-    //move_uploaded_file($imagen[''])
-    $ruta_imagen = "uhmm";
     $conectado = 0;
     $color_fondo = "#202020";
-    $estado = "Hey there I am using queguasap";
+    $estado = "Hola estoy usando queguasap";
     $hash_contrasena = password_hash($contrasena, PASSWORD_BCRYPT);
 
     try {
@@ -137,7 +135,7 @@ function alta_usuario_ok($telefono, $contrasena, $nombre, $imagen)
             $nombre,
             $hash_contrasena,
             $conectado,
-            $ruta_imagen,
+            $nombre_imagen,
             $color_fondo,
             $estado
         );
@@ -159,35 +157,4 @@ function alta_usuario_ok($telefono, $contrasena, $nombre, $imagen)
 function borrar_chat_ok()
 {
     return true;
-}
-
-/*
- * Función que valida los datos al registrarse:
- *
- * E: $telefono, $contrasena, $contrasena_confirm, $nombre, $imagen
- * S: string: mensaje de error, o nulo si se ha validado OK
- * SQL:
- */
-function validar_datos_registro($telefono, $contrasena, $contrasena_confirm, $nombre, $imagen)
-{
-    // todo validar que numero tiene 9 digitos y sea solo numeros
-
-    if ($telefono === '' || $contrasena === ''
-        || $contrasena_confirm === '' || $nombre === '') {
-        return "Tienes que rellenar todos los campos";
-    }
-
-    if ($contrasena !== $contrasena_confirm) {
-        return 'Las contraseñas no son iguales';
-    }
-
-    if ($imagen['error'] === UPLOAD_ERR_OK) {
-        if ($imagen['type'] !== "image/png" ||
-            $imagen['type'] !== "image/gif" ||
-            $imagen['type'] !== "image/jpeg") {
-            return "La imagen de perfil que has subido no es valida";
-        }
-    }
-
-    return null;
 }

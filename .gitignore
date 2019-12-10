@@ -1,3 +1,4 @@
 .idea/
 *.iml
-
+content/attachments/*
+content/profile_images/*

@@ -44,32 +44,27 @@ function show_menu()
 
 
 /*
-*	Muestra el formulario de contacto
-*	E: nada
-*	S: nada
-*	SQL: nada
+*	Muestra el formulario de inicio de sesión
+*	E:
+*	S:
+*	SQL:
 */
-function show_loging()
+function show_login()
 {
-
     echo '
-
-
 		<section id="slider">
 			<form action="index.php" method="post" role="form">
-
 					<h2>LOG IN</h2>
-
 					<input id="numero" type="text" name="numero" placeholder="número de telefono" required="" ><br><br>
-   
 					<input id="pass" type="password" name="pass_user" placeholder="password" required="" ><br><br>
-	   
-					<button type="submit" name="login">Login</button><br><br>  
-					    
+					<button type="submit" name="login">Login</button><br><br>    
 			</form>
 			
-			       <a href="index.php?cmd=registrarse"> <button name="registrarse">Registrarse</button></a><br><br> 
-			        
+			<a href="index.php?cmd=registrarse">
+			    <button name="registrarse">Registrarse</button>
+			</a>
+			
+			<br><br>    
 		</section>';
 }
 
@@ -134,7 +129,7 @@ function show_chats()
 * S: nada
 * SQL: select idChat, telefono from TIENE where numero not in (select telefono from TIENE )
 */
-function show_nuevo_chat() 
+function show_nuevo_chat()
 {
     echo '
 	<section id="chats">
@@ -353,7 +348,8 @@ function show_ajustes()
 ';
 }
 
-function show_register() {
+function show_register()
+{
     echo ' 
         <section id="slider">
         <h2>Registrate</h2>
