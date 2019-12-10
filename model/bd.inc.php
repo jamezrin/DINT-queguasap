@@ -42,7 +42,7 @@ function login_ok()
 */
 function unset_session()
 {
-    unset($_SESSION['user']);
+    unset($_SESSION['telefono']);
 }
 
 /*

@@ -6,8 +6,7 @@
 *	S:
 *	SQL:
 */
-function show_header()
-{
+function show_header() {
     global $config;
     $nombreApp = $config["NOMBRE_HEADER"];
     echo '<!DOCTYPE html>
