@@ -68,8 +68,8 @@ function show_content() {
         }
     } else {
         if (isset($_POST['login'])) {
-            $telefono = $_POST['numero'];
-            $contrasena = $_POST['pass_user'];
+            $telefono = $_POST['telefono'];
+            $contrasena = $_POST['contrasena'];
 
             if (inicio_usuario_ok($telefono, $contrasena)) {
                 show_chats();
