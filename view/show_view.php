@@ -17,7 +17,7 @@ function show_menu() {
             <header>
                 <section id=\"estado\">
                   <img src=\"$imagen_perfil\" class=\"imgRedonda\"/><br>
-                  <p>$estado</p>
+                  <p class='estado'>$estado</p>
                 </section>
     
                 <nav class=\"menu\">
