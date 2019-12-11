@@ -103,7 +103,7 @@ function show_chats() {
 
                 echo "
                 <h3>
-                    <a href=\"index.php?cmd=ver_chat?telefono=$otro_telefono\" class=\"btn\">$nombre
+                    <a href=\"index.php?cmd=ver_chat&telefono=$otro_telefono\" class=\"btn\">$nombre
                        <img src=\"$imagen_conectado\" width=10 height=10 />
                     </a>
                     
@@ -209,6 +209,7 @@ function show_confirm($msg) {
 * SQL: select idMensaje, texto, fecha, hora, fichero, idChat, telefono from mensajes 
 */
 
+/*
 function show_contacto_chat() {
     echo '
         <section id="datosP">
@@ -271,6 +272,111 @@ function show_contacto_chat() {
             </section>
 		</section> ';
 }
+*/
+
+function show_contacto_chat() {
+    $conn = connection();
+
+    $telefono = $_SESSION['telefono'];
+    $telefono_contacto = $_GET['telefono'];
+
+    try {
+        $stmt2 = $conn -> prepare("
+            SELECT nombre, imagen, estado
+            FROM usuarios
+            WHERE telefono = ?
+        ");
+
+        $stmt2->bind_param("s", $telefono_contacto);
+        $stmt2->execute();
+        $result2 = $stmt2->get_result()->fetch_assoc();
+        $nombre_contacto = $result2['nombre'];
+        $estado_contacto = $result2['estado'];
+
+        $stmt = $conn->prepare("
+            SELECT usuarios.nombre AS nombre_emisor, telefono, momento, texto, archivo 
+            FROM envia_mensaje 
+            INNER JOIN usuarios
+                ON envia_mensaje.emisor = usuarios.telefono
+            WHERE (emisor = ? AND receptor = ?) 
+                OR (receptor = ? AND emisor = ?)
+            ORDER BY momento DESC;
+        ");
+
+        $stmt->bind_param("ssss",
+            $telefono, $telefono_contacto,
+            $telefono, $telefono_contacto);
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        echo "
+            <section id=\"datosP\">
+                <section class=\"datosU\">
+                    <img src=\"view/images/chica.jpg\" class=\"imgRedonda\"/>
+                    <h3>$nombre_contacto: $estado_contacto</h3><br><br><br>
+        ";
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $nombre_emisor = $row['nombre_emisor'];
+                $momento = $row['momento'];
+                $texto = $row['texto'];
+                $archivo = $row['archivo'];
+                echo "
+                  <section class=\"mensajeU\">
+                      <h4>$nombre_emisor $momento</h4>
+                      <p>$texto</p>
+                      <div></div>";
+
+                if ($archivo !== null) {
+                    echo "<img src=\"content/attachments/$archivo\" width=100 height=100 />";
+                }
+
+                echo "</section>";
+            }
+        } else {
+            echo "<h3>Dile algo a tu amigo</h3>";
+        }
+
+        echo "
+            </section>
+            <section class=\"contestar_mensaje\">
+                <form id=\"vb\" action=\"index.php\" method=\"post\" role=\"form\">
+    
+                    <textarea id=\"ta\" placeholder=\"Mensaje\" rows=\"5\" cols=\"40\" required=\"\" style=\"resize: none;\" >
+                    </textarea>
+                    
+                    <br>
+                    <br>
+    
+                    <span>
+                      Elegir archivo<input type=\"file\" name=\"b1\" multiple>
+                    </span>
+           
+                    <button type=\"submit\" name=\"contestar\" >Contestar</button><br><br>
+    
+                </form>
+
+                <form id=\"vb\" action=\"index.php\" method=\"post\" role=\"form\">
+                    <h5>Realiza un backup de este chat y asignale un nombre al fichero</h5>
+    
+                    <input id=\"nombre\" type=\"text\" name=\"nombre\" placeholder=\"nombre del fichero\" required=\"\" ><br><br>
+           
+                    <button type=\"submit\" name=\"backup\" >Backup</button><br><br>
+                </form>
+            </section>
+        ";
+
+        echo "</section>";
+
+        $stmt->close();
+        return 0;
+    } catch (Exception $e) {
+        echo $e;
+        return $e->getCode();
+    }
+}
 
 /*
 *	Muestra la página modificar el perfil
@@ -281,6 +387,7 @@ function show_contacto_chat() {
 function show_perfil() {
     global $config;
     $long_texto = $config["LONG_TEXTO"];
+
     echo "
         <section id=\"perfil\">
             <form action=\"index.php\" method=\"POST\" role=\"form\" enctype=\"multipart/form-data\">
