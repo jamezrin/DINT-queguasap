@@ -274,12 +274,13 @@ function consultar_nuevos_contactos($telefono) {
                 UNION
                 SELECT DISTINCT emisor AS telefono FROM envia_mensaje WHERE receptor = ?
             ) conversacion INNER JOIN usuarios ON usuarios.telefono = conversacion.telefono
-        );
+        ) AND telefono != ?;
     ");
 
-    $stmt->bind_param("ss",
+    $stmt->bind_param("sss",
         $telefono,
-        $telefono);
+        $telefono,
+		$telefono);
 
     $stmt->execute();
     $result = $stmt->get_result();
@@ -295,11 +296,12 @@ function consultar_contactos_existentes($telefono) {
             SELECT DISTINCT receptor AS telefono FROM envia_mensaje WHERE emisor = ?
             UNION
             SELECT DISTINCT emisor AS telefono FROM envia_mensaje WHERE receptor = ?
-        ) conversacion INNER JOIN usuarios ON usuarios.telefono = conversacion.telefono;
+        ) conversacion INNER JOIN usuarios ON usuarios.telefono = conversacion.telefono AND usuarios.telefono != ?;
     ");
 
-    $stmt->bind_param("ss",
+    $stmt->bind_param("sss",
         $telefono,
+		$telefono,
         $telefono);
 
     $stmt->execute();
