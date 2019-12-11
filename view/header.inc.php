@@ -9,10 +9,14 @@
 function show_header() {
     global $config;
     $nombreApp = $config["NOMBRE_HEADER"];
-    $telefono = $_SESSION['telefono'];
-    $info = consultar_usuario($telefono);
-
-    $color_fondo = $info['color_fondo'];
+    $color_fondo = null;
+    if(sesion_iniciada()) {
+        $telefono = $_SESSION['telefono'];
+        $info = consultar_usuario($telefono);
+        $color_fondo = $info['color_fondo'];
+    } else {
+        $color_fondo = $config['BACK_COLOR'];
+    }
     echo '<!DOCTYPE html>
 			<html>
 			<head>
