@@ -17,6 +17,8 @@ function connection()
         $config['DB_NAME']
     );
 
+    $conn->set_charset('utf8mb4');
+
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
     return $conn;
@@ -193,6 +195,12 @@ function cambiar_conectado($telefono, $conectado) {
     } catch (Exception $e) {
         return $e->getCode();
     }
+}
+
+function editar_imagen($telefono) {
+    $conn = connection();
+
+
 }
 
 function consultar_usuario($telefono) {

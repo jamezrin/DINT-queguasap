@@ -11,37 +11,45 @@ function handle_main() {
             if (isset($_GET["cmd"])) {
                 switch ($_GET['cmd']) {
                     case 'chat':
+                        show_menu();
                         show_chats();
                         break;
 
                     case 'nuevo_chat':
+                        show_menu();
                         show_nuevo_chat();
                         break;
 
                     case 'perfil':
+                        show_menu();
                         show_perfil();
                         break;
 
                     case 'ajustes':
+                        show_menu();
                         show_ajustes();
                         break;
 
                     case 'borrar_chat':
                         $chat_id = $_GET['id'];
+                        show_menu();
                         show_borrar_chat($chat_id);
                         break;
 
                     case 'ver_chat':
+                        show_menu();
                         show_contacto_chat();
                         break;
 
                     case 'logout':
+                        show_menu();
                         show_login();
                         show_msg("Ha cerrado la sesión");
                         break;
 
                     default:
                         show_msg('Comando no valido');
+                        show_menu();
                         show_chats();
                 }
             } else {
@@ -52,6 +60,7 @@ function handle_main() {
                 if (tamaño_img()) {
                     if (guardar_mensaje()) {
                         show_msg("Mensaje enviado");
+                        show_menu();
                         show_chats();
                     } else {
                         show_msg("Error no enviado");
@@ -63,6 +72,7 @@ function handle_main() {
                 if (maximo_caracteres_estado()) {
                     if (editar_perfil()) {
                         show_msg("Perfil editado");
+                        show_menu();
                         show_chats();
                     } else {
                         show_msg("Error no editado");
@@ -85,27 +95,34 @@ function handle_main() {
 
                     move_uploaded_file($imagen['tmp_name'], $destino_imagen);
 
+                    show_menu();
                     show_chats();
                 } else {
                     show_msg("No se ha subido ninguna imagen");
+                    show_menu();
                     show_perfil();
                 }
             } else if (isset($_POST['guardar_color'])) {
                 if (color_seleccionado()) {
                     show_msg("Color cambiado");
+                    show_menu();
                     show_chats();
                 } else {
+                    show_menu();
                     show_msg("Error no se cambio de color");
                 }
             } else if (isset($_POST['backup'])) {
                 if (backup_chat()) {
                     show_msg("backup guardado");
+                    show_menu();
                     show_chats();
                 } else {
+                    show_menu();
                     show_msg("Error no realizar el backup");
                 }
             } else {
-                 show_chats();
+                show_menu();
+                show_chats();
             }
         }
     } else {
@@ -113,12 +130,15 @@ function handle_main() {
             if (isset($_GET['cmd'])) {
                 switch ($_GET['cmd']) {
                     case 'registrarse':
+                        show_menu();
                         show_register();
                         break;
                     default:
+                        show_menu();
                         show_login();
                 }
             } else {
+                show_menu();
                 show_login();
             }
         } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -127,9 +147,11 @@ function handle_main() {
                 $contrasena = $_POST['contrasena'];
 
                 if (inicio_usuario_ok($telefono, $contrasena)) {
+                    show_menu();
                     show_chats();
                 } else {
                     show_msg("Has introducido un telefono o contraseña no validos");
+                    show_menu();
                     show_login();
                 }
             } else if (isset($_POST['alta_usuario'])) {
@@ -160,6 +182,7 @@ function handle_main() {
                         } else {
                             show_msg("Ha ocurrido el error al darte de alta $error_alta");
                         }
+                        show_menu();
                         show_register();
                     } else {
                         show_msg('Has sido dado de alta correctamente');

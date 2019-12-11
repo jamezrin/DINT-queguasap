@@ -16,7 +16,7 @@ function show_header() {
 
 				<link rel="icon" href="view/images/bd.jpg">
 				<link rel="stylesheet" type="text/css" href="view/css/estilo.css">
-				<meta charset= "utf-8">
+				<meta charset="utf-8">
 			</head>
 			<body>
 				<div id="principal">';
