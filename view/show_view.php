@@ -9,16 +9,10 @@
 function show_menu() {
     if (sesion_iniciada()) {
         $telefono = $_SESSION['telefono'];
-        $info = consultar_usuario($telefono);
+        $props = consultar_usuario($telefono);
+        $imagen_perfil = controlar_imagen($props['imagen']);
+        $estado = $props['estado'];
 
-        $estado = $info['estado'];
-        $imagen_perfil = "view/images/f.jpg";
-        if ($info['imagen'] !== null) {
-            $imagen_perfil = "content/profile_images/" . $info['imagen'];
-        }
-
-        // select emisor from envia_mensaje where receptor = yo
-        // select receptor from envia_mensaje where emisor = yo
         echo "
             <header>
                 <section id=\"estado\">
@@ -128,12 +122,19 @@ function show_chats() {
     }
 }
 
+function show_nuevo_chat() {
+    $telefono = $_SESSION['telefono'];
+
+
+}
+
 /*
 * Crea un nuevo chat con gente con la que nunca se ha hablado antes
 * E: nada
 * S: nada
 * SQL: select idChat, telefono from TIENE where numero not in (select telefono from TIENE )
 */
+/*
 function show_nuevo_chat() {
     echo '
         <section id="chats">
@@ -155,6 +156,7 @@ function show_nuevo_chat() {
         </section>
 	';
 }
+*/
 
 /*
  * Pregunta si el usuario quiere eliminar el chat en contexto

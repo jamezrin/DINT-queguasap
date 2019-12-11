@@ -205,6 +205,14 @@ function imagen_subida($imagen) {
         $imagen['error'] === UPLOAD_ERR_OK;
 }
 
+function controlar_imagen($campo_imagen) {
+    if ($campo_imagen !== null) {
+        return "content/profile_images/$campo_imagen";
+    } else {
+        return "view/images/avatar.png";
+    }
+}
+
 function generar_nombre_foto_perfil($imagen, $telefono) {
     $extension = pathinfo($imagen['name'], PATHINFO_EXTENSION);
     return "foto-$telefono.$extension";
