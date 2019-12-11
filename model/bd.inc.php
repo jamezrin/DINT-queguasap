@@ -101,7 +101,40 @@ function maximo_caracteres_estado()
 */
 function color_seleccionado()
 {
-    return true;
+    $color = $_POST['color'];
+    switch ($color) {
+        case "verde":
+            $color_hex = "#008f39";
+            break;
+        case "rojo":
+            $color_hex = "#cb3234";
+            break;
+        case "blanco":
+            $color_hex = "#ffffff";
+            break;
+        case "azul":
+            $color_hex = "#3b83bd";
+            break;
+        case "rosa":
+            $color_hex = "#ff0080";
+            break;
+    }
+    $conn = connection();
+    $telefono = $_SESSION['telefono'];
+    try {
+        $stmt = $conn->prepare("UPDATE usuarios SET color_fondo = ? WHERE telefono = ?");
+        $stmt->bind_param("ss",
+            $color_hex,
+            $telefono);
+
+        $stmt->execute();
+        $stmt->close();
+        return true;
+    } catch (Exception $e) {
+        return $e->getCode();
+    }
+
+
 }
 
 /*
