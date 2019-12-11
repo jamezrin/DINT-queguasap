@@ -101,13 +101,17 @@ function handle_main() {
                         $info = consultar_usuario($telefono);
                         $imagen_actual = $info['imagen'];
 
-                        if (file_exists($imagen_actual)) {
-                            chmod($imagen_actual,0755);
-                            unlink($imagen_actual);
+                        if ($imagen_actual) {
+                            $ruta_imagen_actual = generar_ruta_imagen_perfil($imagen_actual);
+
+                            if (file_exists($ruta_imagen_actual)) {
+                                chmod($ruta_imagen_actual,0755);
+                                unlink($ruta_imagen_actual);
+                            }
                         }
 
                         $nombre_imagen = generar_nombre_foto_perfil($imagen, $telefono);
-                        $destino_imagen = getcwd() . "/content/profile_images/$nombre_imagen";
+                        $destino_imagen = generar_ruta_imagen_perfil($nombre_imagen);
 
                         editar_imagen($telefono, $nombre_imagen);
                         move_uploaded_file($imagen['tmp_name'], $destino_imagen);
@@ -248,9 +252,15 @@ function controlar_imagen_perfil($campo_imagen) {
 }
 
 function generar_nombre_foto_perfil($imagen, $telefono) {
+    // numero aleatorio para que la imagen cambie en la cache
     $aleatorio = rand();
+
     $extension = pathinfo($imagen['name'], PATHINFO_EXTENSION);
     return "foto-$telefono-$aleatorio.$extension";
+}
+
+function generar_ruta_imagen_perfil($nombre_imagen) {
+    return getcwd() . "/content/profile_images/$nombre_imagen";
 }
 
 function validar_datos_registro($telefono, $contrasena, $contrasena_confirm, $nombre, $imagen) {

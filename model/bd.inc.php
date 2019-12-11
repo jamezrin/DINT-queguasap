@@ -54,12 +54,12 @@ function editar_perfil()
 *	SQL: nada
 */
 function color_seleccionado() {
-
     $color = $_POST['color'];
     $color_hex = mapear_color($color);
     $conn = connection();
 
     $telefono = $_SESSION['telefono'];
+
     try {
         $stmt = $conn->prepare("UPDATE usuarios SET color_fondo = ? WHERE telefono = ?");
         $stmt->bind_param("ss",
@@ -72,8 +72,6 @@ function color_seleccionado() {
     } catch (Exception $e) {
         return $e->getCode();
     }
-
-
 }
 
 /*
@@ -88,7 +86,7 @@ function backup_chat()
     $telefono = $_SESSION['telefono'];
     $telefono_contacto = $_POST['telefono_contacto'];
 
-    if(trim($nombre_archivo) !== '') {
+    if (trim($nombre_archivo) !== '') {
         $conn = connection();
 
         $stmt = $conn->prepare("
