@@ -30,11 +30,8 @@ function connection()
 *	S:
 *	SQL: UPDATE into usuario ...
 */
-function editar_perfil()
-{
+function editar_estado($telefono, $nuevo_estado) {
     $conn = connection();
-    $nuevo_estado = $_POST['nuevo_estado'];
-    $telefono = $_SESSION['telefono'];
     try {
         $stmt = $conn->prepare("UPDATE usuarios SET estado = ? WHERE telefono = ?");
         $stmt->bind_param("ss", $nuevo_estado, $telefono);
@@ -53,12 +50,9 @@ function editar_perfil()
 *	S: boolean: si se ha podido guardar el color o no
 *	SQL: nada
 */
-function color_seleccionado() {
-    $color = $_POST['color'];
+function cambiar_color($telefono, $color) {
     $color_hex = mapear_color($color);
     $conn = connection();
-
-    $telefono = $_SESSION['telefono'];
 
     try {
         $stmt = $conn->prepare("UPDATE usuarios SET color_fondo = ? WHERE telefono = ?");
@@ -74,18 +68,35 @@ function color_seleccionado() {
     }
 }
 
+function enviar_mensaje($telefono_emisor, $telefono_contacto, $adjunto, $mensaje) {
+    $conn = connection();
+
+    try {
+        $stmt = $conn->prepare("
+            INSERT INTO envia_mensaje (emisor, receptor, texto, archivo) 
+            VALUES (?, ?, ?, ?)");
+
+        $stmt->bind_param("ssss",
+            $telefono_emisor,
+            $telefono_contacto,
+            $mensaje,
+            $adjunto);
+
+        $stmt->execute();
+        $stmt->close();
+        return true;
+    } catch (Exception $e) {
+        return $e->getCode();
+    }
+}
+
 /*
 *	Funcion que guarda el chat en un fichero backup.txt
 *	E:
 *	S: booleano: guardado correctamente
 *	SQL: SELECT * FROM Chats WHERE ChatId = $chat_id
 */
-function backup_chat()
-{
-    $nombre_archivo = $_POST['nombre'];
-    $telefono = $_SESSION['telefono'];
-    $telefono_contacto = $_POST['telefono_contacto'];
-
+function backup_chat($telefono, $telefono_contacto, $nombre_archivo) {
     if (trim($nombre_archivo) !== '') {
         $conn = connection();
 
@@ -118,6 +129,7 @@ function backup_chat()
         show_msg("El nombre del archivo no puede ser un espacio en blanco");
     }
 
+    return false;
 }
 
 /*
@@ -221,25 +233,5 @@ function consultar_usuario($telefono) {
         return $resultado;
     } catch (Exception $e) {
         return $e->getCode();
-    }
-}
-
-function mapear_color($color) {
-    global $config;
-    switch ($color) {
-        case "defecto":
-            return $config['BACK_COLOR'];
-        case "verde":
-            return "#008f39";
-        case "rojo":
-            return "#cb3234";
-        case "blanco":
-            return "#ffffff";
-        case "azul":
-            return "#3b83bd";
-        case "rosa":
-            return "#ff0080";
-        default:
-            return "#000000";
     }
 }

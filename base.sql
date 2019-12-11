@@ -18,7 +18,7 @@ CREATE TABLE envia_mensaje (
     emisor VARCHAR(9) NOT NULL,
     receptor VARCHAR(9) NOT NULL,
     texto VARCHAR(255) NOT NULL,
-    momento TIMESTAMP NOT NULL,
+    momento TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     archivo VARCHAR(100),
     CONSTRAINT PK_Mensaje PRIMARY KEY (id),
     FOREIGN KEY (emisor) REFERENCES usuarios(telefono),

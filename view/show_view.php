@@ -207,87 +207,91 @@ function show_contacto_chat() {
     try {
         $props = consultar_usuario($telefono_contacto);
 
-        $imagen_perfil = controlar_imagen_perfil($props['imagen']);
-        $nombre_contacto = $props['nombre'];
-        $estado_contacto = $props['estado'];
+        if ($props) {
+            $imagen_perfil = controlar_imagen_perfil($props['imagen']);
+            $nombre_contacto = $props['nombre'];
+            $estado_contacto = $props['estado'];
 
-        $stmt = $conn->prepare("
-            SELECT usuarios.nombre AS nombre_emisor, telefono, momento, texto, archivo 
-            FROM envia_mensaje 
-            INNER JOIN usuarios
-                ON envia_mensaje.emisor = usuarios.telefono
-            WHERE (emisor = ? AND receptor = ?) 
-                OR (receptor = ? AND emisor = ?)
-            ORDER BY momento DESC;
-        ");
+            $stmt = $conn->prepare("
+                SELECT usuarios.nombre AS nombre_emisor, telefono, momento, texto, archivo 
+                FROM envia_mensaje 
+                INNER JOIN usuarios
+                    ON envia_mensaje.emisor = usuarios.telefono
+                WHERE (emisor = ? AND receptor = ?) 
+                    OR (receptor = ? AND emisor = ?)
+                ORDER BY momento DESC;
+            ");
 
-        $stmt->bind_param("ssss",
-            $telefono, $telefono_contacto,
-            $telefono, $telefono_contacto);
+            $stmt->bind_param("ssss",
+                $telefono, $telefono_contacto,
+                $telefono, $telefono_contacto);
 
-        $stmt->execute();
-        $result = $stmt->get_result();
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-        echo "
-            <section id=\"datosP\">
-                <section class=\"datosU\">
-                    <img src=\"$imagen_perfil\" class=\"imgRedonda\"/>
-                    <h3>$nombre_contacto: $estado_contacto</h3><br><br><br>
-        ";
+            echo "
+                <section id=\"datosP\">
+                    <section class=\"datosU\">
+                        <img src=\"$imagen_perfil\" class=\"imgRedonda\"/>
+                        <h3>$nombre_contacto: $estado_contacto</h3><br><br><br>
+            ";
 
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $nombre_emisor = $row['nombre_emisor'];
-                $momento = $row['momento'];
-                $texto = $row['texto'];
-                $archivo = $row['archivo'];
-                echo "
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $nombre_emisor = $row['nombre_emisor'];
+                    $momento = $row['momento'];
+                    $texto = $row['texto'];
+                    $archivo = $row['archivo'];
+                    echo "
                   <section class=\"mensajeU\">
                       <h4>$nombre_emisor $momento</h4>
                       <p>$texto</p>
                       <div></div>";
 
-                if ($archivo !== null) {
-                    echo "<img src=\"content/attachments/$archivo\" width=100 height=100 />";
-                }
+                    if ($archivo !== null) {
+                        echo "<img src=\"content/attachments/$archivo\" width=100 height=100 />";
+                    }
 
-                echo "</section>";
+                    echo "</section>";
+                }
+            } else {
+                echo "<h3 class='mensajeU'>Dile algo a tu amigo</h3>";
             }
+
+            echo "
+                </section>
+                
+                <section class=\"contestar_mensaje\">
+                    <form id=\"vb\" action=\"index.php\" method=\"post\" role=\"form\" enctype='multipart/form-data'>
+                        <textarea id=\"mensaje\" name=\"mensaje\" placeholder=\"Mensaje\" rows=\"5\" cols=\"40\" required=\"\" style=\"resize: none;\" ></textarea>
+                        
+                        <br>
+                        <br>
+        
+                        <span>Elegir archivo<input type=\"file\" name=\"adjunto\" multiple></span>
+                        <input type=\"hidden\" name=\"telefono_contacto\" value=\"$telefono_contacto\">
+               
+                        <button type=\"submit\" name=\"contestar\" >Contestar</button><br><br>
+        
+                    </form>
+    
+                    <form id=\"vb\" action=\"index.php\" method=\"post\" role=\"form\">
+                        <h5>Realiza un backup de este chat y asignale un nombre al fichero</h5>
+        
+                        <input id=\"nombre\" type=\"text\" name=\"nombre\" placeholder=\"nombre del fichero\" required=\"\" ><br><br>
+                        <input type=\"hidden\" name=\"telefono_contacto\" value=\"$telefono_contacto\">
+                        <button type=\"submit\" name=\"backup\" >Backup</button><br><br>
+                    </form>
+                </section>
+            </section>
+            ";
+
+            $stmt->close();
         } else {
-            echo "<h3 class='mensajeU'>Dile algo a tu amigo</h3>";
+            show_msg("No existe ningun usuario con ese numero de telefono");
+            show_chats();
         }
 
-        echo "
-            </section>
-            
-            <section class=\"contestar_mensaje\">
-                <form id=\"vb\" action=\"index.php\" method=\"post\" role=\"form\">
-                    <textarea id=\"ta\" placeholder=\"Mensaje\" rows=\"5\" cols=\"40\" required=\"\" style=\"resize: none;\" ></textarea>
-                    
-                    <br>
-                    <br>
-    
-                    <span>
-                      Elegir archivo<input type=\"file\" name=\"b1\" multiple>
-                    </span>
-           
-                    <button type=\"submit\" name=\"contestar\" >Contestar</button><br><br>
-    
-                </form>
-
-                <form id=\"vb\" action=\"index.php\" method=\"post\" role=\"form\">
-                    <h5>Realiza un backup de este chat y asignale un nombre al fichero</h5>
-    
-                    <input id=\"nombre\" type=\"text\" name=\"nombre\" placeholder=\"nombre del fichero\" required=\"\" ><br><br>
-                    <input type=\"hidden\" name=\"telefono_contacto\" value='$telefono_contacto'>
-                    <button type=\"submit\" name=\"backup\" >Backup</button><br><br>
-                </form>
-            </section>
-        ";
-
-        echo "</section>";
-
-        $stmt->close();
         return 0;
     } catch (Exception $e) {
         echo $e;
