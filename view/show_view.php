@@ -114,10 +114,6 @@ function show_nuevo_chat($chat_result_props) {
                     <a href=\"index.php?cmd=ver_chat&telefono=$otro_telefono\" class=\"btn\">$nombre
                        <img src=\"$imagen_conectado\" width=10 height=10 />
                     </a>
-                    
-                    <a href=\"index.php?cmd=borrar_chat&telefono=$otro_telefono\">
-                        <img src=\"view/images/equis.png\" width=10 height=10 />
-                    </a>
                 </h3>
                 <br><br><br>
             ";
