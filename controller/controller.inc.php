@@ -96,6 +96,7 @@ function handle_main() {
                     show_chats();
                 } else {
                     show_msg("Error no se cambio de color");
+                    show_ajustes();
                 }
             } else if (isset($_POST['backup'])) {
                 if (backup_chat()) {

@@ -9,6 +9,10 @@
 function show_header() {
     global $config;
     $nombreApp = $config["NOMBRE_HEADER"];
+    $telefono = $_SESSION['telefono'];
+    $info = consultar_usuario($telefono);
+
+    $color_fondo = $info['color_fondo'];
     echo '<!DOCTYPE html>
 			<html>
 			<head>
@@ -18,7 +22,7 @@ function show_header() {
 				<link rel="stylesheet" type="text/css" href="view/css/estilo.css">
 				<meta charset= "utf-8">
 			</head>
-			<body>
+			<body style="background-color:' . $color_fondo . ';">
 				<div id="principal">';
 }
 
