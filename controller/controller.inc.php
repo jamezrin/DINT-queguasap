@@ -53,6 +53,7 @@ function handle_main() {
                         show_chats();
                 }
             } else {
+                show_menu();
                 show_chats();
             }
         } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -69,16 +70,12 @@ function handle_main() {
                     show_msg("Error imagen demasiado grande 20mb como maximo");
                 }
             } else if (isset($_POST['editar_estado'])) {
-                if (maximo_caracteres_estado()) {
-                    if (editar_perfil()) {
-                        show_msg("Perfil editado");
-                        show_menu();
-                        show_chats();
-                    } else {
-                        show_msg("Error no editado");
-                    }
+                if (editar_perfil()) {
+                    show_msg("Perfil editado");
+                    show_menu();
+                    show_chats();
                 } else {
-                    show_msg("Error máximo de caracteres");
+                    show_msg("Error no editado");
                 }
             } else if (isset($_POST['editar_imagen'])) {
                 $imagen = $_FILES['imagen_perfil'];
@@ -123,8 +120,7 @@ function handle_main() {
                     show_ajustes();
                 }
             } else if (isset($_POST['backup'])) {
-                if (backup_chat()) {
-                } else {
+                if (!backup_chat()) {
                     show_menu();
                     show_msg("Error no realizar el backup");
                 }

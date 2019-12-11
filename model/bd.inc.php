@@ -137,20 +137,29 @@ function backup_chat()
 
     $conn = connection();
 
-    $stmt = $conn->prepare("select momento, texto, emisor from envia_mensaje where emisor=? and receptor=? or emisor=? and receptor=?;");
-    $stmt->bind_param("ssss", $telefono, $telefono_contacto, $telefono_contacto, $telefono);
+    $stmt = $conn->prepare("
+        SELECT momento, texto, emisor 
+        FROM envia_mensaje 
+        WHERE (envia_mensaje.emisor = ? AND envia_mensaje.receptor = ?) 
+           OR (envia_mensaje.emisor = ? AND envia_mensaje.receptor = ?)
+    ");
+
+    $stmt->bind_param("ssss",
+        $telefono, $telefono_contacto,
+        $telefono_contacto, $telefono);
     $stmt->execute();
     $result = $stmt->get_result();
+
+    header('Content-type:text/plain');
+    header('Content-Disposition: attachment; filename ="'.$nombre_archivo.'.txt"');
+
     while ($row = $result->fetch_assoc()) {
         $fecha = $row['momento'];
         $texto = $row['texto'];
         $emisor = $row['emisor'];
-        echo ( "[" . $fecha. "] " . $emisor . ":" . $texto);
+        echo "[$fecha] $emisor: $texto\n";
     }
     $stmt->close();
-
-    header('Content-type:text/plain');
-    header('Content-Disposition: attachment; filename ="'.$nombre_archivo.'.txt"');
     return true;
 }
 

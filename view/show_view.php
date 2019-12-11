@@ -243,17 +243,11 @@ function show_contacto_chat() {
     $telefono_contacto = $_GET['telefono'];
 
     try {
-        $stmt2 = $conn -> prepare("
-            SELECT nombre, imagen, estado
-            FROM usuarios
-            WHERE telefono = ?
-        ");
+        $props = consultar_usuario($telefono_contacto);
 
-        $stmt2->bind_param("s", $telefono_contacto);
-        $stmt2->execute();
-        $result2 = $stmt2->get_result()->fetch_assoc();
-        $nombre_contacto = $result2['nombre'];
-        $estado_contacto = $result2['estado'];
+        $imagen_perfil = controlar_imagen($props['imagen']);
+        $nombre_contacto = $props['nombre'];
+        $estado_contacto = $props['estado'];
 
         $stmt = $conn->prepare("
             SELECT usuarios.nombre AS nombre_emisor, telefono, momento, texto, archivo 
@@ -275,7 +269,7 @@ function show_contacto_chat() {
         echo "
             <section id=\"datosP\">
                 <section class=\"datosU\">
-                    <img src=\"view/images/chica.jpg\" class=\"imgRedonda\"/>
+                    <img src=\"$imagen_perfil\" class=\"imgRedonda\"/>
                     <h3>$nombre_contacto: $estado_contacto</h3><br><br><br>
         ";
 

@@ -20,13 +20,13 @@ include_once 'controller/controller.inc.php';
 include_once 'view/show_view.php';
 
 actualizar_sesion();
+
  if (isset($_POST['backup'])) {
     handle_main();
-    } else {
+} else {
      show_header();
      handle_main();
      show_footer();
-
  }
 
 
