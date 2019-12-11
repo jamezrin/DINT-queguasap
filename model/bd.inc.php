@@ -135,32 +135,38 @@ function backup_chat()
     $telefono = $_SESSION['telefono'];
     $telefono_contacto = $_POST['telefono_contacto'];
 
-    $conn = connection();
+    if(trim($nombre_archivo) !== '') {
+        $conn = connection();
 
-    $stmt = $conn->prepare("
-        SELECT momento, texto, emisor 
-        FROM envia_mensaje 
-        WHERE (envia_mensaje.emisor = ? AND envia_mensaje.receptor = ?) 
-           OR (envia_mensaje.emisor = ? AND envia_mensaje.receptor = ?)
-    ");
+        $stmt = $conn->prepare("
+            SELECT momento, texto, emisor 
+            FROM envia_mensaje 
+            WHERE (envia_mensaje.emisor = ? AND envia_mensaje.receptor = ?) 
+               OR (envia_mensaje.emisor = ? AND envia_mensaje.receptor = ?)
+        ");
 
-    $stmt->bind_param("ssss",
-        $telefono, $telefono_contacto,
-        $telefono_contacto, $telefono);
-    $stmt->execute();
-    $result = $stmt->get_result();
+        $stmt->bind_param("ssss",
+            $telefono, $telefono_contacto,
+            $telefono_contacto, $telefono);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    header('Content-type:text/plain');
-    header('Content-Disposition: attachment; filename ="'.$nombre_archivo.'.txt"');
+        header('Content-type:text/plain');
+        header('Content-Disposition: attachment; filename ="'.$nombre_archivo.'.txt"');
 
-    while ($row = $result->fetch_assoc()) {
-        $fecha = $row['momento'];
-        $texto = $row['texto'];
-        $emisor = $row['emisor'];
-        echo "[$fecha] $emisor: $texto\n";
+        while ($row = $result->fetch_assoc()) {
+            $fecha = $row['momento'];
+            $texto = $row['texto'];
+            $emisor = $row['emisor'];
+            echo "[$fecha] $emisor: $texto\n";
+        }
+
+        $stmt->close();
+        return true;
+    } else {
+        show_msg("El nombre del archivo no puede ser un espacio en blanco");
     }
-    $stmt->close();
-    return true;
+
 }
 
 /*

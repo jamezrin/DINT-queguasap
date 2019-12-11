@@ -17,7 +17,7 @@ function show_menu() {
             <header>
                 <section id=\"estado\">
                   <img src=\"$imagen_perfil\" class=\"imgRedonda\"/><br>
-                  <p>$estado</p>
+                  <p class='estado'>$estado</p>
                 </section>
     
                 <nav class=\"menu\">
@@ -292,7 +292,7 @@ function show_contacto_chat() {
                 echo "</section>";
             }
         } else {
-            echo "<h3>Dile algo a tu amigo</h3>";
+            echo "<h3 class='mensajeU'>Dile algo a tu amigo</h3>";
         }
 
         echo "
