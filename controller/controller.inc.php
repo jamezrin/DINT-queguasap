@@ -72,9 +72,20 @@ function handle_main() {
                 }
             } else if (isset($_POST['editar_imagen'])) {
                 $imagen = $_FILES['imagen_perfil'];
+                $telefono = $_SESSION['telefono'];
 
                 if (imagen_subida($imagen)) {
+                    $nombre_imagen = generar_nombre_foto_perfil($imagen, $telefono);
+                    $destino_imagen = getcwd() . "/content/profile_images/$nombre_imagen";
 
+                    if (file_exists($destino_imagen)) {
+                        chmod($destino_imagen,0755);
+                        unlink($destino_imagen);
+                    }
+
+                    move_uploaded_file($imagen['tmp_name'], $destino_imagen);
+
+                    show_chats();
                 } else {
                     show_msg("No se ha subido ninguna imagen");
                     show_perfil();

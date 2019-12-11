@@ -17,6 +17,8 @@ function show_menu() {
             $imagen_perfil = "content/profile_images/" . $info['imagen'];
         }
 
+        // select emisor from envia_mensaje where receptor = yo
+        // select receptor from envia_mensaje where emisor = yo
         echo "
             <header>
                 <section id=\"estado\">
@@ -279,7 +281,7 @@ function show_perfil() {
     $long_texto = $config["LONG_TEXTO"];
     echo "
         <section id=\"perfil\">
-            <form action=\"index.php\" method=\"POST\" role=\"form\">
+            <form action=\"index.php\" method=\"POST\" role=\"form\" enctype=\"multipart/form-data\">
                 <label for=\"imagen_perfil\">Cambiar imagen de perfil</label><br>
                 <input type=\"file\" name=\"imagen_perfil\" id=\"imagen_perfil\"><br>
                 <button type=\"submit\" name=\"editar_imagen\">Editar Imagen</button>
