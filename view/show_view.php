@@ -115,7 +115,9 @@ function show_chats() {
             ";
             }
         } else {
-            echo "<h3>Comienza a hacer amigos</h3>";
+            echo "<h3>Comienza a hacer amigos</h3>
+                  <img src=\"view/images/pulgar.png\" width=250 height=275 />
+                  ";
         }
         echo "</section>";
 
@@ -281,6 +283,9 @@ function show_contacto_chat() {
 function show_perfil() {
     global $config;
     $long_texto = $config["LONG_TEXTO"];
+    $telefono = $_SESSION['telefono'];
+    $info = consultar_usuario($telefono);
+    $estado = $info['estado'];
     echo "
         <section id=\"perfil\">
             <form action=\"index.php\" method=\"POST\" role=\"form\" enctype=\"multipart/form-data\">
@@ -293,7 +298,7 @@ function show_perfil() {
              
             <form action=\"index.php\" method=\"POST\" role=\"form\">
                 <label for=\"nuevo_estado\">Cambiar estado</label><br>
-                <textarea id=\"nuevo_estado\" name=\"nuevo_estado\" rows=\"5\" cols=\"40\" required maxlength=\"$long_texto\" style=\"resize: none;\">I am working</textarea><br>
+                <textarea id=\"nuevo_estado\" name=\"nuevo_estado\" rows=\"5\" cols=\"40\" required maxlength=\"$long_texto\" style=\"resize: none;\">$estado</textarea><br>
                 <button type=\"submit\" name=\"editar_estado\">Editar Estado</button>
             </form>
         </section>";
