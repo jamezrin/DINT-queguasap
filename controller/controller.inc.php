@@ -31,9 +31,9 @@ function handle_main() {
                         break;
 
                     case 'borrar_chat':
-                        $chat_id = $_GET['id'];
                         show_menu();
-                        show_borrar_chat($chat_id);
+                        show_chats();
+                        show_msg("Esta funcionalidad no ha sido implementada todavia");
                         break;
 
                     case 'ver_chat':

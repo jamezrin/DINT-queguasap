@@ -190,50 +190,12 @@ function show_nuevo_chat() {
 }
 
 /*
- * Pregunta si el usuario quiere eliminar el chat en contexto
- * E: $chat_id (el identificador del chat)
- * S: nada
- */
-function preguntar_borrar_chat($chat_id) {
-    show_confirm("¿Quieres borrar la conversación con el identificador $chat_id?");
-    return true;
-}
-
-/*
- * Pide confirmación si quiere borar el chat y lo borra
- * E: $chat_id (el identificador del chat)
- * S: nada
- * SQL: nada
- */
-function show_borrar_chat($chat_id)
-{
-    if (preguntar_borrar_chat($chat_id)) {
-        if (borrar_chat_ok()) {
-            echo "<p class=\"centro\">Has borrado el chat con el identificador $chat_id</p>";
-        } else {
-            echo "<p class=\"centro\">No se ha podido borrar ese chat</p>";
-        }
-    }
-
-    show_chats();
-}
-
-/*
 *	Muestra un mensaje de tipo alert
 *	E: $msg (mensaje que se quiere mostrar en alert)
 *	S: nada
 */
 function show_msg($msg) {
     echo "<script type='text/javascript'>alert('" . $msg . "');</script>";
-}
-
-/*
-*	Muestra un mensaje de tipo confirm
-*	E: $msg (mensaje que se quiere mostrar en confirm)
-*	S: nada
-*/
-function show_confirm($msg) {
-    echo "<script type='text/javascript'>confirm('" . $msg . "');</script>";
 }
 
 function show_contacto_chat() {
