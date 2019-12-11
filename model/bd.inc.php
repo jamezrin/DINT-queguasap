@@ -25,40 +25,6 @@ function connection()
 }
 
 /*
-*	Comprueba login
-*	E: nada (lee directamente)
-*	S: booleano: conexión correcta
-*	SQL: select * from usuarios WHERE ...
-*/
-function login_ok()
-{
-    return true;
-}
-
-
-/*
-*	Función para terminar la sesión
-*	E: nada
-*	S: nada
-*	SQL: nada
-*/
-function unset_session()
-{
-    unset($_SESSION['telefono']);
-}
-
-/*
-*	Guardar el mensaje en la BD
-*	E: nada (lee directamente)
-*	S: boolean: operación correcta
-*	SQL: INSERT into Mensaje (texto) values (?);	SELECT idMensaje, texto, fecha, hora, fichero, telefono from Mensajes
-*/
-function guardar_mensaje()
-{
-    return true;
-}
-
-/*
 *	Funcion que modifica el perfil
 *	E:
 *	S:
@@ -109,19 +75,6 @@ function color_seleccionado() {
 
 
 }
-
-/*
-*	Comprueba el tamaño de la imagen seleccionada, el tamaño de la 
-* 	imagen estara en el fichero de configuración
-*	E:
-*	S: booleano: tamaño correcto
-*	SQL: nada
-*/
-function tamaño_img()
-{
-    return true;
-}
-
 
 /*
 *	Funcion que guarda el chat en un fichero backup.txt
@@ -271,16 +224,6 @@ function consultar_usuario($telefono) {
     } catch (Exception $e) {
         return $e->getCode();
     }
-}
-
-/*
-*   Función que borra un chat de la base de datos
- *  E:
- *  S: boolean: si se ha podido borrar el chat o no
- *  SQL: DELETE FROM Chats WHERE ChatId = $chat_id
-*/
-function borrar_chat_ok() {
-    return true;
 }
 
 function mapear_color($color) {

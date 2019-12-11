@@ -10,7 +10,7 @@ function show_menu() {
     if (sesion_iniciada()) {
         $telefono = $_SESSION['telefono'];
         $props = consultar_usuario($telefono);
-        $imagen_perfil = controlar_imagen($props['imagen']);
+        $imagen_perfil = controlar_imagen_perfil($props['imagen']);
         $estado = $props['estado'];
 
         echo "
@@ -207,7 +207,7 @@ function show_contacto_chat() {
     try {
         $props = consultar_usuario($telefono_contacto);
 
-        $imagen_perfil = controlar_imagen($props['imagen']);
+        $imagen_perfil = controlar_imagen_perfil($props['imagen']);
         $nombre_contacto = $props['nombre'];
         $estado_contacto = $props['estado'];
 

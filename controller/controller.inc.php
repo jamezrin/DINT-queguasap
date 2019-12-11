@@ -98,16 +98,18 @@ function handle_main() {
                     $error_validacion_imagen = validar_imagen($imagen);
 
                     if (!$error_validacion_imagen) {
+                        $info = consultar_usuario($telefono);
+                        $imagen_actual = $info['imagen'];
+
+                        if (file_exists($imagen_actual)) {
+                            chmod($imagen_actual,0755);
+                            unlink($imagen_actual);
+                        }
+
                         $nombre_imagen = generar_nombre_foto_perfil($imagen, $telefono);
                         $destino_imagen = getcwd() . "/content/profile_images/$nombre_imagen";
 
-                        if (file_exists($destino_imagen)) {
-                            chmod($destino_imagen,0755);
-                            unlink($destino_imagen);
-                        }
-
                         editar_imagen($telefono, $nombre_imagen);
-
                         move_uploaded_file($imagen['tmp_name'], $destino_imagen);
 
                         show_base(function() {
@@ -237,7 +239,7 @@ function imagen_subida($imagen) {
         $imagen['error'] === UPLOAD_ERR_OK;
 }
 
-function controlar_imagen($campo_imagen) {
+function controlar_imagen_perfil($campo_imagen) {
     if ($campo_imagen !== null) {
         return "content/profile_images/$campo_imagen";
     } else {
@@ -246,8 +248,9 @@ function controlar_imagen($campo_imagen) {
 }
 
 function generar_nombre_foto_perfil($imagen, $telefono) {
+    $aleatorio = rand();
     $extension = pathinfo($imagen['name'], PATHINFO_EXTENSION);
-    return "foto-$telefono.$extension";
+    return "foto-$telefono-$aleatorio.$extension";
 }
 
 function validar_datos_registro($telefono, $contrasena, $contrasena_confirm, $nombre, $imagen) {

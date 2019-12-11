@@ -20,6 +20,7 @@ include_once 'controller/controller.inc.php';
 include_once 'view/show_view.php';
 
 actualizar_sesion();
+
 handle_main();
 
 
