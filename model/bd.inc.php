@@ -216,10 +216,21 @@ function cambiar_conectado($telefono, $conectado) {
     }
 }
 
-function editar_imagen($telefono) {
+function editar_imagen($telefono, $imagen) {
     $conn = connection();
 
+    try {
+        $stmt = $conn->prepare("UPDATE usuarios SET imagen = ? WHERE telefono = ?");
+        $stmt->bind_param("ss",
+            $imagen,
+            $telefono);
 
+        $stmt->execute();
+        $stmt->close();
+        return 0;
+    } catch (Exception $e) {
+        return $e->getCode();
+    }
 }
 
 function consultar_usuario($telefono) {

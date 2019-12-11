@@ -93,6 +93,8 @@ function handle_main() {
                         unlink($destino_imagen);
                     }
 
+                    editar_imagen($telefono, $nombre_imagen);
+
                     move_uploaded_file($imagen['tmp_name'], $destino_imagen);
 
                     show_menu();
