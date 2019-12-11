@@ -125,8 +125,10 @@ function handle_main() {
             } else if (isset($_POST['backup'])) {
                 if (backup_chat()) {
                 } else {
+                    show_header();
                     show_menu();
-                    show_msg("Error no realizar el backup");
+                    show_chats();
+                    show_footer();
                 }
             } else {
                 show_menu();

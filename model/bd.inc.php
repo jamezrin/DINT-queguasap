@@ -135,23 +135,27 @@ function backup_chat()
     $telefono = $_SESSION['telefono'];
     $telefono_contacto = $_POST['telefono_contacto'];
 
-    $conn = connection();
+    if(trim($nombre_archivo) !== '') {
+        $conn = connection();
 
-    $stmt = $conn->prepare("select momento, texto, emisor from envia_mensaje where emisor=? and receptor=? or emisor=? and receptor=?;");
-    $stmt->bind_param("ssss", $telefono, $telefono_contacto, $telefono_contacto, $telefono);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    while ($row = $result->fetch_assoc()) {
-        $fecha = $row['momento'];
-        $texto = $row['texto'];
-        $emisor = $row['emisor'];
-        echo ( "[" . $fecha. "] " . $emisor . ":" . $texto);
+        $stmt = $conn->prepare("select momento, texto, emisor from envia_mensaje where emisor=? and receptor=? or emisor=? and receptor=?;");
+        $stmt->bind_param("ssss", $telefono, $telefono_contacto, $telefono_contacto, $telefono);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $fecha = $row['momento'];
+            $texto = $row['texto'];
+            $emisor = $row['emisor'];
+            echo("[" . $fecha . "] " . $emisor . ":" . $texto);
+        }
+        $stmt->close();
+
+        header('Content-type:text/plain');
+        header('Content-Disposition: attachment; filename ="' . $nombre_archivo . '.txt"');
+        return true;
+    } else {
+        show_msg("El nombre del archivo no puede ser un espacio en blanco");
     }
-    $stmt->close();
-
-    header('Content-type:text/plain');
-    header('Content-Disposition: attachment; filename ="'.$nombre_archivo.'.txt"');
-    return true;
 }
 
 /*
