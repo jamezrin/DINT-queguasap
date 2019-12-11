@@ -361,7 +361,7 @@ function actualizar_sesion() {
         }
     } else {
         if (isset($_GET['cmd'])) {
-            if ($_GET['cmd'] == 'logout') {
+            if ($_GET['cmd'] == 'logout' && sesion_iniciada()) {
                 $telefono = $_SESSION['telefono'];
                 cambiar_conectado($telefono, false);
 
