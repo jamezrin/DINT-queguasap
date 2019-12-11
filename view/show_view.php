@@ -2,9 +2,9 @@
 
 /*
 *	Muestra el menú
-*	E: nada
-*	S: nada
-*	SQL: select logo, texto from usuario
+*	E:
+*	S:
+*	SQL:
 */
 function show_menu() {
     if (sesion_iniciada()) {
