@@ -235,3 +235,75 @@ function consultar_usuario($telefono) {
         return $e->getCode();
     }
 }
+
+function consultar_chat($telefono, $telefono_contacto) {
+    $conn = connection();
+
+    $stmt = $conn->prepare("
+        SELECT usuarios.nombre AS nombre_emisor, telefono, momento, texto, archivo 
+        FROM envia_mensaje 
+        INNER JOIN usuarios
+            ON envia_mensaje.emisor = usuarios.telefono
+        WHERE (emisor = ? AND receptor = ?) 
+            OR (receptor = ? AND emisor = ?)
+        ORDER BY momento DESC;
+    ");
+
+    $stmt->bind_param("ssss",
+        $telefono, $telefono_contacto,
+        $telefono, $telefono_contacto);
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    $stmt->close();
+
+    return $result;
+}
+
+function consultar_nuevos_contactos($telefono) {
+    $conn = connection();
+
+    $stmt = $conn->prepare("
+        SELECT DISTINCT telefono, conectado, nombre 
+        FROM usuarios
+        WHERE telefono NOT IN (
+            SELECT usuarios.telefono FROM (
+                SELECT DISTINCT receptor AS telefono FROM envia_mensaje WHERE emisor = ?
+                UNION
+                SELECT DISTINCT emisor AS telefono FROM envia_mensaje WHERE receptor = ?
+            ) conversacion INNER JOIN usuarios ON usuarios.telefono = conversacion.telefono
+        );
+    ");
+
+    $stmt->bind_param("ss",
+        $telefono,
+        $telefono);
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result;
+}
+
+function consultar_contactos_existentes($telefono) {
+    $conn = connection();
+
+    $stmt = $conn->prepare("
+        SELECT usuarios.telefono, usuarios.conectado, usuarios.nombre FROM (
+            SELECT DISTINCT receptor AS telefono FROM envia_mensaje WHERE emisor = ?
+            UNION
+            SELECT DISTINCT emisor AS telefono FROM envia_mensaje WHERE receptor = ?
+        ) conversacion INNER JOIN usuarios ON usuarios.telefono = conversacion.telefono;
+    ");
+
+    $stmt->bind_param("ss",
+        $telefono,
+        $telefono);
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result;
+}

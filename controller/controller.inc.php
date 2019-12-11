@@ -7,15 +7,24 @@
 */
 function handle_main() {
     if (sesion_iniciada()) {
+        $telefono = $_SESSION['telefono'];
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             if (isset($_GET["cmd"])) {
                 switch ($_GET['cmd']) {
                     case 'chat':
-                        wrap_skeleton('show_chats');
+                        wrap_skeleton(function() use (&$telefono) {
+                            $chat_result_props = consultar_contactos_existentes($telefono);
+
+                            show_chats($chat_result_props);
+                        });
                         break;
 
                     case 'nuevo_chat':
-                        wrap_skeleton('show_nuevo_chat');
+                        wrap_skeleton(function() use (&$telefono) {
+                            $chat_result_props = consultar_nuevos_contactos($telefono);
+
+                            show_nuevo_chat($chat_result_props);
+                        });
                         break;
 
                     case 'perfil':
@@ -28,11 +37,22 @@ function handle_main() {
 
                     case 'borrar_chat':
                         show_msg("Esta funcionalidad no ha sido implementada todavía");
-                        wrap_skeleton('show_chats');
+
+                        wrap_skeleton(function() use (&$telefono) {
+                            $chat_result_props = consultar_contactos_existentes($telefono);
+
+                            show_chats($chat_result_props);
+                        });
                         break;
 
                     case 'ver_chat':
-                        wrap_skeleton('show_contacto_chat');
+                        $telefono_contacto = $_GET['telefono'];
+                        wrap_skeleton(function() use (&$telefono, &$telefono_contacto) {
+                            $user_props = consultar_usuario($telefono_contacto);
+                            $chat_result_props = consultar_chat($telefono, $telefono_contacto);
+
+                            show_contacto_chat($user_props, $chat_result_props);
+                        });
                         break;
 
                     case 'logout':
@@ -42,14 +62,22 @@ function handle_main() {
 
                     default:
                         show_msg('Comando no valido');
-                        wrap_skeleton('show_chats');
+
+                        wrap_skeleton(function() use (&$telefono) {
+                            $chat_result_props = consultar_contactos_existentes($telefono);
+
+                            show_chats($chat_result_props);
+                        });
                 }
             } else {
-                wrap_skeleton('show_chats');
+                wrap_skeleton(function() use (&$telefono) {
+                    $chat_result_props = consultar_contactos_existentes($telefono);
+
+                    show_chats($chat_result_props);
+                });
             }
         } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['contestar'])) {
-                $telefono = $_SESSION['telefono'];
                 $telefono_contacto = $_POST['telefono_contacto'];
                 $adjunto = $_FILES['adjunto'];
                 $mensaje = $_POST['mensaje'];
@@ -58,21 +86,24 @@ function handle_main() {
                 if (!$error_mensaje) {
                     if (enviar_mensaje($telefono, $telefono_contacto, null, $mensaje)) {
                         show_msg("Mensaje enviado");
-                        wrap_skeleton(function() {
-                            show_contacto_chat();
+                        wrap_skeleton(function() use (&$telefono, &$telefono_contacto) {
+                            $user_props = consultar_usuario($telefono_contacto);
+                            $chat_result_props = consultar_chat($telefono, $telefono_contacto);
+                            show_contacto_chat($user_props, $chat_result_props);
                         });
                     } else {
                         show_msg("No se ha podido enviar tu mensaje");
                     }
                 } else {
                     show_msg($error_mensaje);
-                    wrap_skeleton(function() {
-                        show_contacto_chat();
+                    wrap_skeleton(function() use (&$telefono, &$telefono_contacto){
+                        $user_props = consultar_usuario($telefono_contacto);
+                        $chat_result_props = consultar_chat($telefono, $telefono_contacto);
+                        show_contacto_chat($user_props, $chat_result_props);
                     });
                 }
             } else if (isset($_POST['editar_estado'])) {
                 $nuevo_estado = $_POST['nuevo_estado'];
-                $telefono = $_SESSION['telefono'];
 
                 if (editar_estado($telefono, $nuevo_estado)) {
                     show_msg("Perfil editado");
@@ -80,10 +111,13 @@ function handle_main() {
                     show_msg("Error no editado");
                 }
 
-                wrap_skeleton('show_chats');
+                wrap_skeleton(function() use (&$telefono) {
+                    $chat_result_props = consultar_contactos_existentes($telefono);
+
+                    show_chats($chat_result_props);
+                });
             } else if (isset($_POST['editar_imagen'])) {
                 $imagen = $_FILES['imagen_perfil'];
-                $telefono = $_SESSION['telefono'];
 
                 if (imagen_subida($imagen)) {
                     $error_validacion_imagen = validar_imagen($imagen);
@@ -91,7 +125,11 @@ function handle_main() {
                     if (!$error_validacion_imagen) {
                         controlar_cambio_imagen_perfil($telefono, $imagen);
 
-                        wrap_skeleton('show_chats');
+                        wrap_skeleton(function() use (&$telefono) {
+                            $chat_result_props = consultar_contactos_existentes($telefono);
+
+                            show_chats($chat_result_props);
+                        });
                     } else {
                         show_msg($error_validacion_imagen);
                         wrap_skeleton('show_perfil');
@@ -101,8 +139,8 @@ function handle_main() {
                     wrap_skeleton('show_perfil');
                 }
             } else if (isset($_POST['guardar_color'])) {
-                $telefono = $_SESSION['telefono'];
                 $color = $_POST['color'];
+
                 if (cambiar_color($telefono, $color)) {
                     wrap_skeleton('show_ajustes');
                 } else {
@@ -110,14 +148,22 @@ function handle_main() {
                     wrap_skeleton('show_ajustes');
                 }
             } else if (isset($_POST['backup'])) {
-                $telefono = $_SESSION['telefono'];
                 $telefono_contacto = $_POST['telefono_contacto'];
                 $nombre_archivo = $_POST['nombre'];
+
                 if (!backup_chat($telefono, $telefono_contacto, $nombre_archivo)) {
-                    wrap_skeleton('show_chats');
+                    wrap_skeleton(function() use (&$telefono) {
+                        $chat_result_props = consultar_contactos_existentes($telefono);
+
+                        show_chats($chat_result_props);
+                    });
                 }
             } else {
-                wrap_skeleton('show_chats');
+                wrap_skeleton(function() use (&$telefono) {
+                    $chat_result_props = consultar_contactos_existentes($telefono);
+
+                    show_chats($chat_result_props);
+                });
             }
         }
     } else {
@@ -140,7 +186,11 @@ function handle_main() {
 
                 if (inicio_usuario_ok($telefono, $contrasena)) {
                     show_menu();
-                    show_chats();
+                    wrap_skeleton(function() use (&$telefono) {
+                        $chat_result_props = consultar_contactos_existentes($telefono);
+
+                        show_chats($chat_result_props);
+                    });
                 } else {
                     show_msg("Has introducido un telefono o contraseña no validos");
                     wrap_skeleton('show_login');

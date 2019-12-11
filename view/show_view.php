@@ -65,99 +65,43 @@ function show_login() {
 		</section>';
 }
 
-function show_chats() {
-    $conn = connection();
-    $telefono = $_SESSION['telefono'];
+function show_chats($chat_result_props) {
+    echo "<section id=\"chats\">";
+    if ($chat_result_props->num_rows > 0) {
+        while ($row = $chat_result_props->fetch_assoc()) {
+            $otro_telefono = $row['telefono'];
+            $nombre = $row['nombre'];
+            $conectado = $row['conectado'];
+            $imagen_conectado = $conectado ?
+                "view/images/verde.png" :
+                "view/images/rojo.png";
 
-    try {
-        $stmt = $conn->prepare("
-            SELECT usuarios.telefono, usuarios.conectado, usuarios.nombre FROM (
-                SELECT DISTINCT receptor AS telefono FROM envia_mensaje WHERE emisor = ?
-                UNION
-                SELECT DISTINCT emisor AS telefono FROM envia_mensaje WHERE receptor = ?
-            ) conversacion INNER JOIN usuarios ON usuarios.telefono = conversacion.telefono;
-        ");
-
-        /*
-        alternativa
-        SELECT DISTINCT usuarios.telefono, envia_mensaje.emisor AS emisor, envia_mensaje.receptor AS receptor, usuarios.conectado, usuarios.nombre
-        FROM usuarios
-        INNER JOIN envia_mensaje
-        ON (envia_mensaje.receptor = usuarios.telefono AND envia_mensaje.emisor = ?)
-        OR (envia_mensaje.emisor = usuarios.telefono AND envia_mensaje.receptor = ?);
-         */
-
-        $stmt->bind_param("ss",
-            $telefono,
-            $telefono);
-
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        echo "<section id=\"chats\">";
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $otro_telefono = $row['telefono'];
-                $nombre = $row['nombre'];
-                $conectado = $row['conectado'];
-                $imagen_conectado = $conectado ?
-                    "view/images/verde.png" :
-                    "view/images/rojo.png";
-
-                echo "
-                <h3>
-                    <a href=\"index.php?cmd=ver_chat&telefono=$otro_telefono\" class=\"btn\">$nombre
-                       <img src=\"$imagen_conectado\" width=10 height=10 />
-                    </a>
-                    
-                    <a href=\"index.php?cmd=borrar_chat&telefono=$otro_telefono\">
-                        <img src=\"view/images/equis.png\" width=10 height=10 />
-                    </a>
-                </h3>
-                <br><br><br>
-            ";
-            }
-        } else {
-            echo "<h3>¿Estás más solo que la una?</h3>
-                  <img src=\"view/images/pulgar.png\" width=250 height=275 />
-                  <h3>Pulsa en \"Nuevo chat\" y conoce gente única</h3>
-                  ";
+            echo "
+            <h3>
+                <a href=\"index.php?cmd=ver_chat&telefono=$otro_telefono\" class=\"btn\">$nombre
+                   <img src=\"$imagen_conectado\" width=10 height=10 />
+                </a>
+                
+                <a href=\"index.php?cmd=borrar_chat&telefono=$otro_telefono\">
+                    <img src=\"view/images/equis.png\" width=10 height=10 />
+                </a>
+            </h3>
+            <br><br><br>
+        ";
         }
-        echo "</section>";
-
-        $stmt->close();
-        return 0;
-    } catch (Exception $e) {
-        return $e->getCode();
+    } else {
+        echo "<h3>¿Estás más solo que la una?</h3>
+              <img src=\"view/images/pulgar.png\" width=250 height=275 />
+              <h3>Pulsa en \"Nuevo chat\" y conoce gente única</h3>
+              ";
     }
+    echo "</section>";
 }
 
-function show_nuevo_chat() {
-    $conn = connection();
-    $telefono = $_SESSION['telefono'];
-
-    $stmt = $conn->prepare("
-        SELECT DISTINCT telefono, conectado, nombre 
-        FROM usuarios
-        WHERE telefono NOT IN (
-            SELECT usuarios.telefono FROM (
-                SELECT DISTINCT receptor AS telefono FROM envia_mensaje WHERE emisor = ?
-                UNION
-                SELECT DISTINCT emisor AS telefono FROM envia_mensaje WHERE receptor = ?
-            ) conversacion INNER JOIN usuarios ON usuarios.telefono = conversacion.telefono
-        );
-    ");
-
-    $stmt->bind_param("ss",
-        $telefono,
-        $telefono);
-
-    $stmt->execute();
-    $result = $stmt->get_result();
-
+function show_nuevo_chat($chat_result_props) {
     echo "<section id=\"chats\">";
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
+    if ($chat_result_props->num_rows > 0) {
+        while ($row = $chat_result_props->fetch_assoc()) {
             $otro_telefono = $row['telefono'];
             $nombre = $row['nombre'];
             $conectado = $row['conectado'];
@@ -184,9 +128,6 @@ function show_nuevo_chat() {
                   ";
     }
     echo "</section>";
-
-    $stmt->close();
-    return 0;
 }
 
 /*
@@ -198,104 +139,73 @@ function show_msg($msg) {
     echo "<script type='text/javascript'>alert('" . $msg . "');</script>";
 }
 
-function show_contacto_chat() {
-    $conn = connection();
+function show_contacto_chat($user_props, $chat_result_props) {
+    if ($user_props) {
+        $nombre_contacto = $user_props['nombre'];
+        $telefono_contacto = $user_props['telefono'];
+        $estado_contacto = $user_props['estado'];
+        $nombre_imagen_perfil = $user_props['imagen'];
+        $imagen_perfil = controlar_imagen_perfil($nombre_imagen_perfil);
 
-    $telefono = $_SESSION['telefono'];
-    $telefono_contacto = $_GET['telefono'];
-
-    try {
-        $props = consultar_usuario($telefono_contacto);
-
-        if ($props) {
-            $imagen_perfil = controlar_imagen_perfil($props['imagen']);
-            $nombre_contacto = $props['nombre'];
-            $estado_contacto = $props['estado'];
-
-            $stmt = $conn->prepare("
-                SELECT usuarios.nombre AS nombre_emisor, telefono, momento, texto, archivo 
-                FROM envia_mensaje 
-                INNER JOIN usuarios
-                    ON envia_mensaje.emisor = usuarios.telefono
-                WHERE (emisor = ? AND receptor = ?) 
-                    OR (receptor = ? AND emisor = ?)
-                ORDER BY momento DESC;
-            ");
-
-            $stmt->bind_param("ssss",
-                $telefono, $telefono_contacto,
-                $telefono, $telefono_contacto);
-
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            echo "
-                <section id=\"datosP\">
-                    <section class=\"datosU\">
-                        <img src=\"$imagen_perfil\" class=\"imgRedonda\"/>
-                        <h3>$nombre_contacto: $estado_contacto</h3><br><br><br>
+        echo "
+            <section id=\"datosP\">
+                <section class=\"datosU\">
+                    <img src=\"$imagen_perfil\" class=\"imgRedonda\"/>
+                    <h3>$nombre_contacto: $estado_contacto</h3><br><br><br>
             ";
 
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $nombre_emisor = $row['nombre_emisor'];
-                    $momento = $row['momento'];
-                    $texto = $row['texto'];
-                    $archivo = $row['archivo'];
-                    echo "
-                  <section class=\"mensajeU\">
-                      <h4>$nombre_emisor $momento</h4>
-                      <p>$texto</p>
-                      <div></div>";
+        if ($chat_result_props->num_rows > 0) {
+            while ($row = $chat_result_props->fetch_assoc()) {
+                $nombre_emisor = $row['nombre_emisor'];
+                $momento = $row['momento'];
+                $texto = $row['texto'];
+                $archivo = $row['archivo'];
+                echo "
+                      <section class=\"mensajeU\">
+                          <h4>$nombre_emisor $momento</h4>
+                          <p>$texto</p>
+                          <div></div>";
 
-                    if ($archivo !== null) {
-                        echo "<img src=\"content/attachments/$archivo\" width=100 height=100 />";
-                    }
-
-                    echo "</section>";
+                /*
+                if ($archivo) {
+                    echo "<img src=\"content/attachments/$archivo\" width=100 height=100 />";
                 }
-            } else {
-                echo "<h3 class='mensajeU'>Dile algo a tu amigo</h3>";
+                */
+
+                echo "</section>";
             }
-
-            echo "
-                </section>
-                
-                <section class=\"contestar_mensaje\">
-                    <form id=\"vb\" action=\"index.php\" method=\"post\" role=\"form\" enctype='multipart/form-data'>
-                        <textarea id=\"mensaje\" name=\"mensaje\" placeholder=\"Mensaje\" rows=\"5\" cols=\"40\" required=\"\" style=\"resize: none;\" ></textarea>
-                        
-                        <br>
-                        <br>
-        
-                        <span>Elegir archivo<input type=\"file\" name=\"adjunto\" multiple></span>
-                        <input type=\"hidden\" name=\"telefono_contacto\" value=\"$telefono_contacto\">
-               
-                        <button type=\"submit\" name=\"contestar\" >Contestar</button><br><br>
-        
-                    </form>
-    
-                    <form id=\"vb\" action=\"index.php\" method=\"post\" role=\"form\">
-                        <h5>Realiza un backup de este chat y asignale un nombre al fichero</h5>
-        
-                        <input id=\"nombre\" type=\"text\" name=\"nombre\" placeholder=\"nombre del fichero\" required=\"\" ><br><br>
-                        <input type=\"hidden\" name=\"telefono_contacto\" value=\"$telefono_contacto\">
-                        <button type=\"submit\" name=\"backup\" >Backup</button><br><br>
-                    </form>
-                </section>
-            </section>
-            ";
-
-            $stmt->close();
         } else {
-            show_msg("No existe ningun usuario con ese numero de telefono");
-            show_chats();
+            echo "<h3 class='mensajeU'>Dile algo a tu amigo</h3>";
         }
 
-        return 0;
-    } catch (Exception $e) {
-        echo $e;
-        return $e->getCode();
+        echo "
+            </section>
+            <section class=\"contestar_mensaje\">
+                <form id=\"vb\" action=\"index.php\" method=\"post\" role=\"form\" enctype='multipart/form-data'>
+                    <textarea id=\"mensaje\" name=\"mensaje\" placeholder=\"Mensaje\" rows=\"5\" cols=\"40\" required=\"\" style=\"resize: none;\" ></textarea>
+                    
+                    <br>
+                    <br>
+    
+                    <span>Elegir archivo<input type=\"file\" name=\"adjunto\" multiple></span>
+                    <input type=\"hidden\" name=\"telefono_contacto\" value=\"$telefono_contacto\">
+           
+                    <button type=\"submit\" name=\"contestar\" >Contestar</button><br><br>
+    
+                </form>
+
+                <form id=\"vb\" action=\"index.php\" method=\"post\" role=\"form\">
+                    <h5>Realiza un backup de este chat y asignale un nombre al fichero</h5>
+    
+                    <input id=\"nombre\" type=\"text\" name=\"nombre\" placeholder=\"nombre del fichero\" required=\"\" ><br><br>
+                    <input type=\"hidden\" name=\"telefono_contacto\" value=\"$telefono_contacto\">
+                    <button type=\"submit\" name=\"backup\" >Backup</button><br><br>
+                </form>
+            </section>
+        </section>
+        ";
+    } else {
+        show_msg("No existe ningun usuario con ese numero de telefono");
     }
 }
 
