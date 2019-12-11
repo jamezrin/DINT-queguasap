@@ -116,9 +116,6 @@ function handle_main() {
                 }
             } else if (isset($_POST['backup'])) {
                 if (backup_chat()) {
-                    show_msg("backup guardado");
-                    show_menu();
-                    show_chats();
                 } else {
                     show_menu();
                     show_msg("Error no realizar el backup");

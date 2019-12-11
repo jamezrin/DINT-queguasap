@@ -109,8 +109,9 @@ function show_chats() {
             ";
             }
         } else {
-            echo "<h3>Comienza a hacer amigos</h3>
+            echo "<h3>¿Estás más solo que la una?</h3>
                   <img src=\"view/images/pulgar.png\" width=250 height=275 />
+                  <h3>Pulsa en \"Nuevo chat\" y conoce gente única</h3>
                   ";
         }
         echo "</section>";
@@ -366,7 +367,7 @@ function show_contacto_chat() {
                     <h5>Realiza un backup de este chat y asignale un nombre al fichero</h5>
     
                     <input id=\"nombre\" type=\"text\" name=\"nombre\" placeholder=\"nombre del fichero\" required=\"\" ><br><br>
-           
+                    <input type=\"hidden\" name=\"telefono_contacto\" value='$telefono_contacto'>
                     <button type=\"submit\" name=\"backup\" >Backup</button><br><br>
                 </form>
             </section>

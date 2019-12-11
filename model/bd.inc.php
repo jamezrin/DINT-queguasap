@@ -82,18 +82,6 @@ function editar_perfil()
 }
 
 /*
-*	Comprueba el máximo número de caracteres del texto del estado del 
-* 	usurario, configurable 
-*	E:
-*	S: booleano: número correcto
-*	SQL: 
-*/
-function maximo_caracteres_estado()
-{
-    return true;
-}
-
-/*
 *	Guarda el color seleccionado en el fichero de configuración
 *	E: nada
 *	S: boolean: si se ha podido guardar el color o no
@@ -143,6 +131,26 @@ function tamaño_img()
 */
 function backup_chat()
 {
+    $nombre_archivo = $_POST['nombre'];
+    $telefono = $_SESSION['telefono'];
+    $telefono_contacto = $_POST['telefono_contacto'];
+
+    $conn = connection();
+
+    $stmt = $conn->prepare("select momento, texto, emisor from envia_mensaje where emisor=? and receptor=? or emisor=? and receptor=?;");
+    $stmt->bind_param("ssss", $telefono, $telefono_contacto, $telefono_contacto, $telefono);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $fecha = $row['momento'];
+        $texto = $row['texto'];
+        $emisor = $row['emisor'];
+        echo ( "[" . $fecha. "] " . $emisor . ":" . $texto);
+    }
+    $stmt->close();
+
+    header('Content-type:text/plain');
+    header('Content-Disposition: attachment; filename ="'.$nombre_archivo.'.txt"');
     return true;
 }
 
