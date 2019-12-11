@@ -85,20 +85,28 @@ function handle_main() {
                 $telefono = $_SESSION['telefono'];
 
                 if (imagen_subida($imagen)) {
-                    $nombre_imagen = generar_nombre_foto_perfil($imagen, $telefono);
-                    $destino_imagen = getcwd() . "/content/profile_images/$nombre_imagen";
+                    $error_validacion_imagen = validar_imagen($imagen);
 
-                    if (file_exists($destino_imagen)) {
-                        chmod($destino_imagen,0755);
-                        unlink($destino_imagen);
+                    if (!$error_validacion_imagen) {
+                        $nombre_imagen = generar_nombre_foto_perfil($imagen, $telefono);
+                        $destino_imagen = getcwd() . "/content/profile_images/$nombre_imagen";
+
+                        if (file_exists($destino_imagen)) {
+                            chmod($destino_imagen,0755);
+                            unlink($destino_imagen);
+                        }
+
+                        editar_imagen($telefono, $nombre_imagen);
+
+                        move_uploaded_file($imagen['tmp_name'], $destino_imagen);
+
+                        show_menu();
+                        show_chats();
+                    } else {
+                        show_menu();
+                        show_perfil();
+                        show_msg($error_validacion_imagen);
                     }
-
-                    editar_imagen($telefono, $nombre_imagen);
-
-                    move_uploaded_file($imagen['tmp_name'], $destino_imagen);
-
-                    show_menu();
-                    show_chats();
                 } else {
                     show_msg("No se ha subido ninguna imagen");
                     show_menu();
@@ -172,8 +180,6 @@ function handle_main() {
 
                     if (imagen_subida($imagen)) {
                         $nombre_imagen = generar_nombre_foto_perfil($imagen, $telefono);
-                        $destino_imagen = getcwd() . "/content/profile_images/$nombre_imagen";
-                        move_uploaded_file($imagen['tmp_name'], $destino_imagen);
                     }
 
                     $error_alta = alta_usuario_ok($telefono, $contrasena, $nombre, $nombre_imagen);
@@ -188,7 +194,13 @@ function handle_main() {
                         show_menu();
                         show_register();
                     } else {
+                        if ($nombre_imagen !== null) {
+                            $destino_imagen = getcwd() . "/content/profile_images/$nombre_imagen";
+                            move_uploaded_file($imagen['tmp_name'], $destino_imagen);
+                        }
+
                         show_msg('Has sido dado de alta correctamente');
+                        show_menu();
                         show_login();
                     }
                 } else {
@@ -232,11 +244,27 @@ function validar_datos_registro($telefono, $contrasena, $contrasena_confirm, $no
         return 'Las contraseñas no son iguales';
     }
 
+    $error_validar_imagen = validar_imagen($imagen);
+    if ($error_validar_imagen) {
+        return $error_validar_imagen;
+    }
+
+    return null;
+}
+
+function validar_imagen($imagen) {
     if (imagen_subida($imagen)) {
         if ($imagen['type'] !== "image/png" &&
             $imagen['type'] !== "image/gif" &&
             $imagen['type'] !== "image/jpeg") {
             return "La imagen de perfil que has subido no es valida";
+        }
+
+        global $config;
+        $limite = (int) $config['TAM_IMAGEN'];
+
+        if ($imagen ['size'] > $limite * 1000 * 1000) {
+            return "La imagen que has elegido es mas grande que $limite megas";
         }
     }
 
@@ -276,3 +304,4 @@ function actualizar_sesion() {
 function sesion_iniciada() {
     return isset($_SESSION["telefono"]);
 }
+

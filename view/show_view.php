@@ -78,6 +78,15 @@ function show_chats() {
             ) conversacion INNER JOIN usuarios ON usuarios.telefono = conversacion.telefono;
         ");
 
+        /*
+        alternativa
+        SELECT DISTINCT usuarios.telefono, envia_mensaje.emisor AS emisor, envia_mensaje.receptor AS receptor, usuarios.conectado, usuarios.nombre
+        FROM usuarios
+        INNER JOIN envia_mensaje
+        ON (envia_mensaje.receptor = usuarios.telefono AND envia_mensaje.emisor = ?)
+        OR (envia_mensaje.emisor = usuarios.telefono AND envia_mensaje.receptor = ?);
+         */
+
         $stmt->bind_param("ss",
             $telefono,
             $telefono);
@@ -123,40 +132,61 @@ function show_chats() {
 }
 
 function show_nuevo_chat() {
+    $conn = connection();
     $telefono = $_SESSION['telefono'];
 
+    $stmt = $conn->prepare("
+        SELECT DISTINCT telefono, conectado, nombre 
+        FROM usuarios
+        WHERE telefono NOT IN (
+            SELECT usuarios.telefono FROM (
+                SELECT DISTINCT receptor AS telefono FROM envia_mensaje WHERE emisor = ?
+                UNION
+                SELECT DISTINCT emisor AS telefono FROM envia_mensaje WHERE receptor = ?
+            ) conversacion INNER JOIN usuarios ON usuarios.telefono = conversacion.telefono
+        );
+    ");
 
-}
+    $stmt->bind_param("ss",
+        $telefono,
+        $telefono);
 
-/*
-* Crea un nuevo chat con gente con la que nunca se ha hablado antes
-* E: nada
-* S: nada
-* SQL: select idChat, telefono from TIENE where numero not in (select telefono from TIENE )
-*/
-/*
-function show_nuevo_chat() {
-    echo '
-        <section id="chats">
-          <h3><a href="index.php?cmd=ver_chat" class="btn">Iñaki
-          <img src="view/images/verde.png" width=10 height=10 /></a></h3><br>
-          <div></div><br><br>
-    
-          <h3><a href="index.php?cmd=ver_chat" class="btn">Miguel
-          <img src="view/images/rojo.png" width=10 height=10 /></a></h3><br>
-          <div></div><br><br>
-          
-          <h3><a href="index.php?cmd=ver_chat" class="btn">Alex
-          <img src="view/images/rojo.png" width=10 height=10 /></a></h3><br>
-          <div></div><br><br>
-          
-          <h3><a href="index.php?cmd=ver_chat" class="btn">Robert
-          <img src="view/images/rojo.png" width=10 height=10 /></a></h3><br>
-          <div></div><br><br>
-        </section>
-	';
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    echo "<section id=\"chats\">";
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $otro_telefono = $row['telefono'];
+            $nombre = $row['nombre'];
+            $conectado = $row['conectado'];
+            $imagen_conectado = $conectado ?
+                "view/images/verde.png" :
+                "view/images/rojo.png";
+
+            echo "
+                <h3>
+                    <a href=\"index.php?cmd=ver_chat&telefono=$otro_telefono\" class=\"btn\">$nombre
+                       <img src=\"$imagen_conectado\" width=10 height=10 />
+                    </a>
+                    
+                    <a href=\"index.php?cmd=borrar_chat&telefono=$otro_telefono\">
+                        <img src=\"view/images/equis.png\" width=10 height=10 />
+                    </a>
+                </h3>
+                <br><br><br>
+            ";
+        }
+    } else {
+        echo "<h3>Ya hablas con todos, ¡genial!</h3>
+                  <img src=\"view/images/pulgar.png\" width=250 height=275 />
+                  ";
+    }
+    echo "</section>";
+
+    $stmt->close();
+    return 0;
 }
-*/
 
 /*
  * Pregunta si el usuario quiere eliminar el chat en contexto
@@ -204,79 +234,6 @@ function show_msg($msg) {
 function show_confirm($msg) {
     echo "<script type='text/javascript'>confirm('" . $msg . "');</script>";
 }
-
-
-/*
-* Muestra el chat del contacto con los mensajes y el estado del contacto
-* E: nada
-* S: nada
-* SQL: select idMensaje, texto, fecha, hora, fichero, idChat, telefono from mensajes 
-*/
-
-/*
-function show_contacto_chat() {
-    echo '
-        <section id="datosP">
-            <section class="datosU">
-                <img src="view/images/chica.jpg" class="imgRedonda"/>
-                <h3>Fulanito: Trabajando</h3><br><br><br>
-    
-                <section class="mensajeU">
-                  <h4>Fulanito  19/05/20119  10:35</h4>
-                  <p>En casa</p>
-                  <div><div>
-                </section>
-    
-                <section class="mensajeU">
-                  <h4>Fulanito  19/05/20119  10:30</h4>
-                  <p>Mira a coco</p>
-                  <img src="view/images/perro.jpg" width=100 height=100 />
-                  <div><div>
-                </section>
-    
-                <section class="mensajeU">
-                  <h4>Menganito  19/05/20119  10:28</h4>
-                  <p>Voy a salir</p>
-                  <div><div>
-                </section>
-    
-                <section class="mensajeU">
-                  <h4>Menganito  19/05/20119  10:20</h4>
-                  <p>Estoy esperando a mi madre</p>
-                  <div><div>
-                </section>
-                
-                <br><br>
-            </section>
-            
-            <section class="contestar_mensaje">
-                <form id="vb" action="index.php" method="post" role="form">
-    
-                    <textarea id="ta" placeholder="Mensaje" rows="5" cols="40" required="" style="resize: none;" >
-                    </textarea>
-                    
-                    <br>
-                    <br>
-    
-                    <span>
-                      Elegir archivo<input type="file" name="b1" multiple>
-                    </span>
-           
-                    <button type="submit" name="contestar" >Contestar</button><br><br>
-    
-                </form>
-
-                <form id="vb" action="index.php" method="post" role="form">
-                    <h5>Realiza un backup de este chat y asignale un nombre al fichero</h5>
-    
-                    <input id="nombre" type="text" name="nombre" placeholder="nombre del fichero" required="" ><br><br>
-           
-                    <button type="submit" name="backup" >Backup</button><br><br>
-                </form>
-            </section>
-		</section> ';
-}
-*/
 
 function show_contacto_chat() {
     $conn = connection();
@@ -366,7 +323,7 @@ function show_contacto_chat() {
                     <h5>Realiza un backup de este chat y asignale un nombre al fichero</h5>
     
                     <input id=\"nombre\" type=\"text\" name=\"nombre\" placeholder=\"nombre del fichero\" required=\"\" ><br><br>
-           
+                    
                     <button type=\"submit\" name=\"backup\" >Backup</button><br><br>
                 </form>
             </section>
