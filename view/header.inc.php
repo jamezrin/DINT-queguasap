@@ -17,6 +17,7 @@ function show_header() {
     } else {
         $color_fondo = $config['BACK_COLOR'];
     }
+
     echo '<!DOCTYPE html>
 			<html>
 			<head>
