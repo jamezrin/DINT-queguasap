@@ -1,5 +1,5 @@
 .idea/
 *.iml
+config.ini
 content/attachments/*
 content/profile_images/*
-./config.ini
