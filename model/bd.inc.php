@@ -99,27 +99,12 @@ function maximo_caracteres_estado()
 *	S: boolean: si se ha podido guardar el color o no
 *	SQL: nada
 */
-function color_seleccionado()
-{
+function color_seleccionado() {
+
     $color = $_POST['color'];
-    switch ($color) {
-        case "verde":
-            $color_hex = "#008f39";
-            break;
-        case "rojo":
-            $color_hex = "#cb3234";
-            break;
-        case "blanco":
-            $color_hex = "#ffffff";
-            break;
-        case "azul":
-            $color_hex = "#3b83bd";
-            break;
-        case "rosa":
-            $color_hex = "#ff0080";
-            break;
-    }
+    $color_hex = mapear_color($color);
     $conn = connection();
+
     $telefono = $_SESSION['telefono'];
     try {
         $stmt = $conn->prepare("UPDATE usuarios SET color_fondo = ? WHERE telefono = ?");
@@ -168,9 +153,10 @@ function backup_chat()
 *	SQL: INSERT INTO usuarios VALUES ($telefono, $contraseña, $nombre, $nombre_imagen)
 */
 function alta_usuario_ok($telefono, $contrasena, $nombre, $nombre_imagen) {
+    global $config;
     $conn = connection();
     $conectado = 0;
-    $color_fondo = "#202020";
+    $color_fondo = $config['BACK_COLOR'];
     $estado = "Hola estoy usando queguasap";
     $hash_contrasena = password_hash($contrasena, PASSWORD_BCRYPT);
 
@@ -261,4 +247,24 @@ function consultar_usuario($telefono) {
 */
 function borrar_chat_ok() {
     return true;
+}
+
+function mapear_color($color) {
+    global $config;
+    switch ($color) {
+        case "defecto":
+            return $config['BACK_COLOR'];
+        case "verde":
+            return "#008f39";
+        case "rojo":
+            return "#cb3234";
+        case "blanco":
+            return "#ffffff";
+        case "azul":
+            return "#3b83bd";
+        case "rosa":
+            return "#ff0080";
+        default:
+            return "#000000";
+    }
 }

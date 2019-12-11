@@ -1,4 +1,4 @@
-BACK_COLOR = verde
+BACK_COLOR = "#f0fff0"
 LONG_TEXTO = 20
 TAM_IMAGEN = 20
 NOMBRE_HEADER = Chating
