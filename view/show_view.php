@@ -362,6 +362,7 @@ function show_ajustes() {
         
               <h4>Selecciona un color de fondo
                   <select name="color">
+                        <option value="defecto">Defecto</option>
                         <option value="rojo">Rojo</option>
                         <option value="verde">Verde</option>
                         <option value="azul">Azul</option>
