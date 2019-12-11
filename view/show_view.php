@@ -146,15 +146,16 @@ function show_chats() {
         $result = $stmt->get_result();
 
         echo "<section id=\"chats\">";
-        while ($row = $result->fetch_assoc()) {
-            $otro_telefono = $row['telefono'];
-            $nombre = $row['nombre'];
-            $conectado = $row['conectado'];
-            $imagen_conectado = $conectado ?
-                "view/images/verde.png" :
-                "view/images/rojo.png";
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $otro_telefono = $row['telefono'];
+                $nombre = $row['nombre'];
+                $conectado = $row['conectado'];
+                $imagen_conectado = $conectado ?
+                    "view/images/verde.png" :
+                    "view/images/rojo.png";
 
-            echo "
+                echo "
                 <h3>
                     <a href=\"index.php?cmd=ver_chat?telefono=$otro_telefono\" class=\"btn\">$nombre
                        <img src=\"$imagen_conectado\" width=10 height=10 />
@@ -166,6 +167,9 @@ function show_chats() {
                 </h3>
                 <br><br><br>
             ";
+            }
+        } else {
+            echo "<h3>Comienza a hacer amigos</h3>";
         }
         echo "</section>";
 
