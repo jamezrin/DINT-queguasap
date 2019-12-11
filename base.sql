@@ -43,3 +43,5 @@ INSERT INTO envia_mensaje (emisor, receptor, texto, momento) VALUES ("901234536"
 INSERT INTO envia_mensaje (emisor, receptor, texto, momento) VALUES ("846264826", "957355483", "profe no pongas falta", CURRENT_TIMESTAMP());
 INSERT INTO envia_mensaje (emisor, receptor, texto, momento) VALUES ("946589467", "901234536", "un rainbow??", CURRENT_TIMESTAMP());
 INSERT INTO envia_mensaje (emisor, receptor, texto, momento) VALUES ("957355483", "993726392", "oye porque haces esto asi", CURRENT_TIMESTAMP());
+
+# select * from envia_mensaje where emisor = ? or receptor = ?;

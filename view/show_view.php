@@ -71,60 +71,6 @@ function show_login() {
 		</section>';
 }
 
-/*
-* Muestra los diferentes tipos de chat
-* E: nada
-* S: nada
-* SQL: select idChat, telefono from TIENE where numero =  $_SESSION['telefono'];
-*/
-/*
-function show_chats() {
-    echo '
-        <section id="chats">
-          <h3><a href="index.php?cmd=ver_chat" class="btn">Fulanito
-          <img src="view/images/verde.png" width=10 height=10 /></a>
-          <a href="index.php?cmd=borrar_chat&id=1"><img src="view/images/equis.png" width=10 height=10 /></a>
-          </h3><br>
-          <div></div><br><br>
-    
-          <h3><a href="index.php?cmd=ver_chat" class="btn">Menganito
-          <img src="view/images/rojo.png" width=10 height=10 /></a>
-          <a href="index.php?cmd=borrar_chat&id=2"><img src="view/images/equis.png" width=10 height=10 /></a>
-          </h3><br>
-          <div></div><br><br>
-    
-          <h3><a href="index.php?cmd=ver_chat" class="btn">Mariano
-          <img src="view/images/rojo.png" width=10 height=10 /></a>
-          <a href="index.php?cmd=borrar_chat&id=3"><img src="view/images/equis.png" width=10 height=10 /></a>
-          </h3><br>
-          <div></div><br><br>
-    
-          <h3><a href="index.php?cmd=ver_chat" class="btn">Sefora
-          <img src="view/images/verde.png" width=10 height=10 /></a>
-          <a href="index.php?cmd=borrar_chat&id=4"><img src="view/images/equis.png" width=10 height=10 /></a>
-          </h3><br>
-          <div></div><br><br>
-    
-          <h3><a href="index.php?cmd=ver_chat" class="btn">Romero
-          <img src="view/images/verde.png" width=10 height=10 /></a>
-          <a href="index.php?cmd=borrar_chat&id=5"><img src="view/images/equis.png" width=10 height=10 /></a>
-          </h3><br>
-          <div></div><br><br>
-    
-          <h3><a href="index.php?cmd=ver_chat" class="btn">Goku
-          <img src="view/images/verde.png" width=10 height=10 /></a>
-          <a href="index.php?cmd=borrar_chat&id=6"><img src="view/images/equis.png" width=10 height=10 /></a>
-          </h3><br>
-          <div></div><br><br>
-    
-          <h3><a href="index.php?cmd=ver_chat" class="btn">Vegeta
-          <img src="view/images/rojo.png" width=10 height=10 /></a>
-          <a href="index.php?cmd=borrar_chat&id=7"><img src="view/images/equis.png" width=10 height=10 /></a>
-          </h3><br>
-          <div></div><br><br>
-        </section>';
-}
-*/
 function show_chats() {
     $conn = connection();
     $telefono = $_SESSION['telefono'];
