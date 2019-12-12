@@ -183,7 +183,7 @@ function show_contacto_chat($user_props, $chat_result_props) {
                     <br>
                     <br>
     
-                    <span>Elegir archivo<input type=\"file\" name=\"adjunto\" multiple></span>
+                    <span>Elegir archivo (funcionalidad desactivada)<input type=\"file\" name=\"adjunto\" multiple disabled></span>
                     <input type=\"hidden\" name=\"telefono_contacto\" value=\"$telefono_contacto\">
            
                     <button type=\"submit\" name=\"contestar\" >Contestar</button><br><br>
