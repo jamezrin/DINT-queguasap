@@ -1,0 +1,21 @@
+{
+    "Copiador": "Miguel",
+    "Copiados": [
+        {
+            "Nombre": "Jaime"
+        },
+        {
+            "Nombre": "Iñaki"
+        }
+    ],
+    "Saludan": {
+        "Personas": [
+            {
+                "Nombre": "Miguel"
+            },
+            {
+                "Nombre": "Tus muertos frfr"
+            }
+        ]
+    }
+}
